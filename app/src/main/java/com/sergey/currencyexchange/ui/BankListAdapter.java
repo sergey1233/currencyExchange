@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.sergey.currencyexchange.R;
 import com.sergey.currencyexchange.model.Bank;
+import com.sergey.currencyexchange.model.NumberUtils;
 
 import java.util.List;
 
@@ -41,56 +42,26 @@ public class BankListAdapter extends RecyclerView.Adapter<BankListAdapter.ViewHo
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
         Bank bank = bankList.get(i);
 
-        viewHolder.logoBank.setImageDrawable(getIconBank(bank));
+        try {
+            viewHolder.logoBank.setImageDrawable(getIconBank(bank));
+        }
+        catch (Exception e) {}
+
         viewHolder.nameBank.setText(bank.getName());
         viewHolder.bankDate.setText(bank.getDate());
-        viewHolder.bankBuyRate.setText(String.format("%.3f", bank.getBuy()));
-        viewHolder.bankSellRate.setText(String.format("%.3f",bank.getSell()));
-        visibleArrows(viewHolder, bank);
+        viewHolder.bankBuyRate.setText(String.format("%.2f", NumberUtils.roundResut(bank.getBuy())));
+        viewHolder.bankSellRate.setText(String.format("%.2f", NumberUtils.roundResut(bank.getSell())));
+        setChangesInfo(viewHolder, bank);
         if (i == bankList.size() - 1)
         {
             viewHolder.line_recycle.setVisibility(View.GONE);
         }
     }
 
-    public void visibleArrows(ViewHolder viewHolder, Bank bank)
-    {
-        if (bank.getChangeBuy() == 1)
-        {
-            viewHolder.bank_buy_changes_img_up.setVisibility(View.VISIBLE);
-            viewHolder.bank_buy_changes_img_down.setVisibility(View.INVISIBLE);
-        }
-        else if (bank.getChangeBuy() == -1)
-        {
-            viewHolder.bank_buy_changes_img_up.setVisibility(View.INVISIBLE);
-            viewHolder.bank_buy_changes_img_down.setVisibility(View.VISIBLE);
-        }
-        else
-        {
-            viewHolder.bank_buy_changes_img_up.setVisibility(View.INVISIBLE);
-            viewHolder.bank_buy_changes_img_down.setVisibility(View.INVISIBLE);
-        }
-
-        if (bank.getChangeSell() == 1)
-        {
-            viewHolder.bank_sell_changes_img_up.setVisibility(View.VISIBLE);
-            viewHolder.bank_sell_changes_img_down.setVisibility(View.INVISIBLE);
-        }
-        else if (bank.getChangeBuy() == -1)
-        {
-            viewHolder.bank_sell_changes_img_up.setVisibility(View.INVISIBLE);
-            viewHolder.bank_sell_changes_img_down.setVisibility(View.VISIBLE);
-        }
-        else
-        {
-            viewHolder.bank_sell_changes_img_up.setVisibility(View.INVISIBLE);
-            viewHolder.bank_sell_changes_img_down.setVisibility(View.INVISIBLE);
-        }
-    }
-
     public Drawable getIconBank(Bank bank)
     {
-        String iconName = "banks_icon_1";
+        String iconName = bank.getIcon();
+        Log.d(TAG, iconName);
         int id = context.getResources().getIdentifier(iconName, "drawable", context.getPackageName());
         Drawable iconBank = context.getResources().getDrawable(id);
 
@@ -112,6 +83,32 @@ public class BankListAdapter extends RecyclerView.Adapter<BankListAdapter.ViewHo
         this.bankList = bankList;
     }
 
+    public void setChangesInfo(ViewHolder viewHolder, Bank bank)
+    {
+        if (bank.getChangesBuy() != 0)
+        {
+            if (bank.getChangesBuy() < 0)
+            {
+                viewHolder.bank_buy_changes_img_down.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                viewHolder.bank_buy_changes_img_up.setVisibility(View.VISIBLE);
+            }
+        }
+
+        if (bank.getChangesSell() != 0)
+        {
+            if (bank.getChangesSell() < 0)
+            {
+                viewHolder.bank_sell_changes_img_down.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                viewHolder.bank_sell_changes_img_up.setVisibility(View.VISIBLE);
+            }
+        }
+    }
 
     class ViewHolder extends RecyclerView.ViewHolder {
 

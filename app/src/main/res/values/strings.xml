@@ -14,4 +14,20 @@
     <string name="buy">Покупка</string>
     <string name="sell">Продажа</string>
     <string name="take_data">Данные взяты с сайтов minfin.com.ua и finance.ua.</string>
+    <string name="exception_count">Не корректно введено кол-во валюты для обмена</string>
+    <string name="exception_currency">Не корректно введен курс обмена</string>
+    <string name="usd">USD</string>
+    <string name="eur">EUR</string>
+    <string name="rub">RUB</string>
+    <string name="privat">ПриватБанк</string>
+    <string name="oshad">ОщадБанк</string>
+    <string name="sber_bank">Сбербанк</string>
+    <string name="raif">Райффайзен Банк Аваль</string>
+    <string name="ukrsots">Укрсоцбанк</string>
+    <string name="alpha_bank">Альфа-Банк</string>
+    <string name="ukrsib">УкрСиббанк</string>
+    <string name="pumb">ПУМБ</string>
+    <string name="vtb">ВТБ Банк</string>
+    <string name="otp">ОТП Банк</string>
+    <string name="crediagr">Креди Агриколь Банк</string>
 </resources>

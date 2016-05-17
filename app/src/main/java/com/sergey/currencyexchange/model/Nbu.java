@@ -8,28 +8,26 @@ import android.os.Parcelable;
  */
 public class Nbu implements Parcelable {
 
-    private double currency;
+    private double rate;
     private String date;
     private double changes = 0;
 
-    public Nbu() {}
-
-    public Nbu (String date, double currency)
+    public Nbu (String date, double rate)
     {
         this.date = date;
-        this.currency = currency;
+        this.rate = rate;
     }
 
     public void setDate(String date) {
         this.date = date;
     }
 
-    public void setCurrency(double currency) {
-        this.currency = currency;
+    public void setRate(double currency) {
+        this.rate = currency;
     }
 
-    public double getCurrency() {
-        return currency;
+    public double getRate() {
+        return rate;
     }
 
     public String getDate() {
@@ -44,21 +42,19 @@ public class Nbu implements Parcelable {
     /* Changes counted from new value to current value */
     public void countChanges(double currency)
     {
-        changes = currency - this.currency;
+        changes = currency - this.rate;
     }
 
-    public void setNewInformation(String date, double currency)
+    public void setNewInformation(String date, double rate)
     {
-        countChanges(currency);
-        this.currency = currency;
+        countChanges(rate);
+        this.rate = rate;
         this.date = date;
     }
 
 
     protected Nbu(Parcel in) {
-        currency = in.readDouble();
-        date = in.readString();
-        changes = in.readDouble();
+        rate = in.readDouble();
     }
 
     public static final Creator<Nbu> CREATOR = new Creator<Nbu>() {
@@ -81,8 +77,6 @@ public class Nbu implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeDouble(currency);
-        dest.writeString(date);
-        dest.writeDouble(changes);
+        dest.writeDouble(rate);
     }
 }

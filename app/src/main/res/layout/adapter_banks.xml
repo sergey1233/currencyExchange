@@ -95,6 +95,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:visibility="gone"
+                        tools:visibility="visible"
                         app:srcCompat="@drawable/icon_arrow_up"/>
 
 
@@ -146,6 +147,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:visibility="gone"
+                        tools:visibility="visible"
                         app:srcCompat="@drawable/icon_arrow_down"/>
 
                 </LinearLayout>

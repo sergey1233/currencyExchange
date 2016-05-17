@@ -1,9 +1,12 @@
 package com.sergey.currencyexchange.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by Sergey on 04.05.2016.
  */
-public class BlackMarket {
+public class BlackMarket implements Parcelable {
     private String date;
     private double buy;
     private double sell;
@@ -16,7 +19,6 @@ public class BlackMarket {
         this.buy = buy;
         this.sell = sell;
     }
-
 
     public double getBuy() {
         return buy;
@@ -61,4 +63,32 @@ public class BlackMarket {
         this.sell = sell;
     }
 
+
+    protected BlackMarket(Parcel in) {
+        buy = in.readDouble();
+        sell = in.readDouble();
+    }
+
+    public static final Creator<BlackMarket> CREATOR = new Creator<BlackMarket>() {
+        @Override
+        public BlackMarket createFromParcel(Parcel in) {
+            return new BlackMarket(in);
+        }
+
+        @Override
+        public BlackMarket[] newArray(int size) {
+            return new BlackMarket[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeDouble(buy);
+        dest.writeDouble(sell);
+    }
 }

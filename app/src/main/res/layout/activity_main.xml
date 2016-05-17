@@ -18,366 +18,102 @@
             android:layout_height="wrap_content"
             layout="@layout/toolbar"/>
 
-        <ScrollView
+        <FrameLayout
+            android:id="@+id/fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="none">
+            android:layout_height="wrap_content">
 
-            <LinearLayout
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="12dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/colorTextMain"
-                            android:textSize="20sp"
-                            android:text="@string/nbu" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingTop="8dp">
-
-                            <TextView
-                                android:id="@+id/nbu_rate"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/colorTextMain"
-                                android:textSize="16sp"
-                                tools:text="26.019960" />
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:layout_marginLeft="12dp">
-
-                                <ImageView
-                                    android:id="@+id/nbu_changes_img_up"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginBottom="2dp"
-                                    android:visibility="gone"
-                                    tools:visibility="visible"
-                                    app:srcCompat="@drawable/icon_arrow_up"/>
-
-                                <TextView
-                                    android:id="@+id/nbu_changes_text"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:textColor="@color/colorText"
-                                    android:textSize="8sp"
-                                    android:text="+0.1748"
-                                    tools:text="+0.1748" />
-
-                                <ImageView
-                                    android:id="@+id/nbu_changes_img_down"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="2dp"
-                                    android:visibility="gone"
-                                    app:srcCompat="@drawable/icon_arrow_down"/>
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="right"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/nbu_date"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/colorText"
-                            android:textSize="12sp"
-                            tools:text="14.03.16 15:06"/>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:background="@drawable/line_white"
-                    android:layout_height="25dp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/colorTextMain"
-                            android:textSize="20sp"
-                            android:text="@string/mb" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingTop="8dp">
-
-                            <TextView
-                                android:id="@+id/mb_buy_rate"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/colorTextMain"
-                                android:textSize="16sp"
-                                tools:text="26.019960" />
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:layout_marginLeft="12dp">
-
-                                <ImageView
-                                    android:id="@+id/mb_buy_changes_img_up"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginBottom="2dp"
-                                    android:visibility="gone"
-                                    app:srcCompat="@drawable/icon_arrow_up"/>
-
-                                <TextView
-                                    android:id="@+id/mb_buy_changes_text"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:textColor="@color/colorText"
-                                    android:textSize="8sp"
-                                    tools:text="+0.1748" />
-
-                                <ImageView
-                                    android:id="@+id/mb_buy_changes_img_down"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="2dp"
-                                    android:visibility="gone"
-                                    tools:visibility="visible"
-                                    app:srcCompat="@drawable/icon_arrow_down"/>
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="right"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/mb_date"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/colorText"
-                                android:textSize="12sp"
-                                tools:text="14.03.16 15:06"/>
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingTop="18dp">
-
-                            <TextView
-                                android:id="@+id/mb_sell_rate"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/colorTextMain"
-                                android:textSize="16sp"
-                                tools:text="26.019960" />
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:layout_marginLeft="12dp">
-
-                                <ImageView
-                                    android:id="@+id/mb_sell_changes_img_up"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginBottom="2dp"
-                                    android:visibility="gone"
-                                    tools:visibility="visible"
-                                    app:srcCompat="@drawable/icon_arrow_up"/>
-
-                                <TextView
-                                    android:id="@+id/mb_sell_changes_text"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:textColor="@color/colorText"
-                                    android:textSize="8sp"
-                                    tools:text="+0.1748" />
-
-                                <ImageView
-                                    android:id="@+id/mb_sell_changes_img_down"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="2dp"
-                                    android:visibility="gone"
-                                    app:srcCompat="@drawable/icon_arrow_down"/>
-
-                            </LinearLayout>
-
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
+                android:layout_height="match_parent"
+                android:scrollbars="none">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_marginTop="12dp"
-                    android:padding="4dp"
-                    android:background="@color/white">
-
-                    <com.jjoe64.graphview.GraphView
-                        android:id="@+id/graph"
-                        android:layout_width="match_parent"
-                        android:layout_height="150dp" />
-
-                </LinearLayout>
-
-
-                <View
-                    android:layout_width="match_parent"
-                    android:background="@drawable/line_white"
-                    android:layout_height="25dp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:padding="12dp">
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/colorTextMain"
-                            android:textSize="20sp"
-                            android:text="@string/blackM" />
+                        android:orientation="horizontal">
 
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingTop="8dp">
+                            android:layout_weight="1"
+                            android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/blackM_buy_rate"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/colorTextMain"
-                                android:textSize="16sp"
-                                tools:text="26.019960" />
+                                android:textSize="20sp"
+                                android:text="@string/nbu" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:layout_marginLeft="12dp">
-
-                                <ImageView
-                                    android:id="@+id/blackM_buy_changes_img_up"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginBottom="2dp"
-                                    android:visibility="gone"
-                                    app:srcCompat="@drawable/icon_arrow_up"/>
+                                android:orientation="horizontal"
+                                android:paddingTop="8dp">
 
                                 <TextView
-                                    android:id="@+id/blackM_buy_changes_text"
+                                    android:id="@+id/nbu_rate"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:textColor="@color/colorText"
-                                    android:textSize="8sp"
-                                    tools:text="+0.1748" />
+                                    android:textColor="@color/colorTextMain"
+                                    android:textSize="16sp"
+                                    tools:text="26.019960" />
 
-                                <ImageView
-                                    android:id="@+id/blackM_buy_changes_img_down"
-                                    android:layout_width="wrap_content"
+                                <LinearLayout
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="2dp"
-                                    android:visibility="gone"
-                                    tools:visibility="visible"
-                                    app:srcCompat="@drawable/icon_arrow_down"/>
+                                    android:orientation="vertical"
+                                    android:layout_marginLeft="12dp">
+
+                                    <ImageView
+                                        android:id="@+id/nbu_changes_img_up"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="2dp"
+                                        android:visibility="gone"
+                                        tools:visibility="visible"
+                                        app:srcCompat="@drawable/icon_arrow_up"/>
+
+                                    <TextView
+                                        android:id="@+id/nbu_changes_text"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textColor="@color/colorText"
+                                        android:textSize="8sp"
+                                        android:text="+0.1748"
+                                        tools:text="+0.1748" />
+
+                                    <ImageView
+                                        android:id="@+id/nbu_changes_img_down"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="2dp"
+                                        android:visibility="gone"
+                                        app:srcCompat="@drawable/icon_arrow_down"/>
+
+                                </LinearLayout>
 
                             </LinearLayout>
 
+
                         </LinearLayout>
 
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="right"
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/blackM_date"
+                                android:id="@+id/nbu_date"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/colorText"
@@ -386,122 +122,393 @@
 
                         </LinearLayout>
 
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:background="@drawable/line_white"
+                        android:layout_height="25dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingTop="18dp">
+                            android:layout_weight="1"
+                            android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/blackM_sell_rate"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/colorTextMain"
-                                android:textSize="16sp"
-                                android:text="26.019960"
-                                tools:text="26.019960" />
+                                android:textSize="20sp"
+                                android:text="@string/mb" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:layout_marginLeft="12dp">
-
-                                <ImageView
-                                    android:id="@+id/blackM_sell_changes_img_up"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginBottom="2dp"
-                                    android:visibility="gone"
-                                    tools:visibility="visible"
-                                    app:srcCompat="@drawable/icon_arrow_up"/>
+                                android:orientation="horizontal"
+                                android:paddingTop="8dp">
 
                                 <TextView
-                                    android:id="@+id/blackM_sell_changes_text"
+                                    android:id="@+id/mb_buy_rate"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:textColor="@color/colorText"
-                                    android:textSize="8sp"
-                                    tools:text="+0.1748" />
+                                    android:textColor="@color/colorTextMain"
+                                    android:textSize="16sp"
+                                    tools:text="26.019960" />
 
-                                <ImageView
-                                    android:id="@+id/blackM_sell_changes_img_down"
-                                    android:layout_width="wrap_content"
+                                <LinearLayout
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="2dp"
-                                    android:visibility="gone"
-                                    app:srcCompat="@drawable/icon_arrow_down"/>
+                                    android:orientation="vertical"
+                                    android:layout_marginLeft="12dp">
+
+                                    <ImageView
+                                        android:id="@+id/mb_buy_changes_img_up"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="2dp"
+                                        android:visibility="gone"
+                                        app:srcCompat="@drawable/icon_arrow_up"/>
+
+                                    <TextView
+                                        android:id="@+id/mb_buy_changes_text"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textColor="@color/colorText"
+                                        android:textSize="8sp"
+                                        tools:text="+0.1748" />
+
+                                    <ImageView
+                                        android:id="@+id/mb_buy_changes_img_down"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="2dp"
+                                        android:visibility="gone"
+                                        tools:visibility="visible"
+                                        app:srcCompat="@drawable/icon_arrow_down"/>
+
+                                </LinearLayout>
 
                             </LinearLayout>
 
 
                         </LinearLayout>
 
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="right"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/mb_date"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/colorText"
+                                    android:textSize="12sp"
+                                    tools:text="14.03.16 15:06"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:paddingTop="18dp">
+
+                                <TextView
+                                    android:id="@+id/mb_sell_rate"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/colorTextMain"
+                                    android:textSize="16sp"
+                                    tools:text="26.019960" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:layout_marginLeft="12dp">
+
+                                    <ImageView
+                                        android:id="@+id/mb_sell_changes_img_up"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="2dp"
+                                        android:visibility="gone"
+                                        tools:visibility="visible"
+                                        app:srcCompat="@drawable/icon_arrow_up"/>
+
+                                    <TextView
+                                        android:id="@+id/mb_sell_changes_text"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textColor="@color/colorText"
+                                        android:textSize="8sp"
+                                        tools:text="+0.1748" />
+
+                                    <ImageView
+                                        android:id="@+id/mb_sell_changes_img_down"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="2dp"
+                                        android:visibility="gone"
+                                        app:srcCompat="@drawable/icon_arrow_down"/>
+
+                                </LinearLayout>
+
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
                     </LinearLayout>
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:background="@drawable/line_white"
-                    android:layout_height="25dp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:textColor="@color/colorTextMain"
-                        android:textSize="20sp"
-                        android:text="@string/banksUkraine" />
 
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:background="@color/white"
-                        android:padding="8dp">
+                        android:layout_marginTop="12dp"
+                        android:padding="4dp"
+                        android:background="@color/white">
 
-                        <android.support.v7.widget.RecyclerView
-                            android:id="@+id/recyclerViewBanks"
+                        <com.jjoe64.graphview.GraphView
+                            android:id="@+id/graph"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@color/white"
-                            android:overScrollMode="never"/>
+                            android:layout_height="150dp" />
 
                     </LinearLayout>
 
 
-                </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:background="@drawable/line_white"
+                        android:layout_height="25dp" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:background="@drawable/line_white"
-                    android:layout_height="25dp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/bitcoin_sell_rate"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colorText"
-                        android:textSize="10sp"
-                        android:text="@string/take_data" />
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/colorTextMain"
+                                android:textSize="20sp"
+                                android:text="@string/blackM" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:paddingTop="8dp">
+
+                                <TextView
+                                    android:id="@+id/blackM_buy_rate"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/colorTextMain"
+                                    android:textSize="16sp"
+                                    tools:text="26.019960" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:layout_marginLeft="12dp">
+
+                                    <ImageView
+                                        android:id="@+id/blackM_buy_changes_img_up"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="2dp"
+                                        android:visibility="gone"
+                                        app:srcCompat="@drawable/icon_arrow_up"/>
+
+                                    <TextView
+                                        android:id="@+id/blackM_buy_changes_text"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textColor="@color/colorText"
+                                        android:textSize="8sp"
+                                        tools:text="+0.1748" />
+
+                                    <ImageView
+                                        android:id="@+id/blackM_buy_changes_img_down"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="2dp"
+                                        android:visibility="gone"
+                                        tools:visibility="visible"
+                                        app:srcCompat="@drawable/icon_arrow_down"/>
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="right"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/blackM_date"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/colorText"
+                                    android:textSize="12sp"
+                                    tools:text="14.03.16 15:06"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:paddingTop="18dp">
+
+                                <TextView
+                                    android:id="@+id/blackM_sell_rate"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/colorTextMain"
+                                    android:textSize="16sp"
+                                    android:text="26.019960"
+                                    tools:text="26.019960" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:layout_marginLeft="12dp">
+
+                                    <ImageView
+                                        android:id="@+id/blackM_sell_changes_img_up"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="2dp"
+                                        android:visibility="gone"
+                                        tools:visibility="visible"
+                                        app:srcCompat="@drawable/icon_arrow_up"/>
+
+                                    <TextView
+                                        android:id="@+id/blackM_sell_changes_text"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textColor="@color/colorText"
+                                        android:textSize="8sp"
+                                        tools:text="+0.1748" />
+
+                                    <ImageView
+                                        android:id="@+id/blackM_sell_changes_img_down"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="2dp"
+                                        android:visibility="gone"
+                                        app:srcCompat="@drawable/icon_arrow_down"/>
+
+                                </LinearLayout>
+
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:background="@drawable/line_white"
+                        android:layout_height="25dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:textColor="@color/colorTextMain"
+                            android:textSize="20sp"
+                            android:text="@string/banksUkraine" />
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:background="@color/white"
+                            android:padding="8dp">
+
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/recycler_view_banks_convert"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/white"
+                                android:overScrollMode="never"/>
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:background="@drawable/line_white"
+                        android:layout_height="25dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/bitcoin_sell_rate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorText"
+                            android:textSize="10sp"
+                            android:text="@string/take_data" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
-            </LinearLayout>
+            </ScrollView>
 
-        </ScrollView>
+        </FrameLayout>
 
     </LinearLayout>
 

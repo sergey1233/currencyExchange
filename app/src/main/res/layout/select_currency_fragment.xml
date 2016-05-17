@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <com.balysv.materialripple.MaterialRippleLayout
+            android:id="@+id/ripple_view_usd"
+            app:mrl_rippleColor="@color/colorPrimaryDark"
+            app:mrl_rippleOverlay="true"
+            app:mrl_rippleAlpha="0.3"
+            app:mrl_rippleHover="true"
+            app:mrl_rippleDuration="150"
+            app:mrl_rippleFadeDuration="75"
+            app:mrl_rippleDelayClick="true"
+            app:mrl_ripplePersistent="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    app:srcCompat="@drawable/flag_usa_dark"
+                    tools:src="@drawable/icon_main_dark"
+                    android:layout_gravity="center"/>
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="36dp"
+                    android:layout_marginRight="36dp"
+                    android:background="@null"
+                    app:srcCompat="@drawable/icon_dollar_dark"
+                    tools:src="@drawable/icon_main_dark"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorText"
+                    android:textSize="32sp"
+                    android:textStyle="bold"
+                    android:text="@string/usd"
+                    android:layout_gravity="center"/>
+
+            </LinearLayout>
+
+        </com.balysv.materialripple.MaterialRippleLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:background="@drawable/line_white"
+            android:layout_height="25dp" />
+
+        <com.balysv.materialripple.MaterialRippleLayout
+            android:id="@+id/ripple_view_eur"
+            app:mrl_rippleColor="@color/colorPrimaryDark"
+            app:mrl_rippleOverlay="true"
+            app:mrl_rippleAlpha="0.3"
+            app:mrl_rippleHover="true"
+            app:mrl_rippleDuration="150"
+            app:mrl_rippleFadeDuration="75"
+            app:mrl_rippleDelayClick="true"
+            app:mrl_ripplePersistent="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    app:srcCompat="@drawable/flag_europe_dark"
+                    tools:src="@drawable/icon_main_dark"
+                    android:layout_gravity="center"/>
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="36dp"
+                    android:layout_marginRight="36dp"
+                    android:background="@null"
+                    app:srcCompat="@drawable/icon_euro_dark"
+                    tools:src="@drawable/icon_main_dark"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorText"
+                    android:textSize="32sp"
+                    android:textStyle="bold"
+                    android:text="@string/eur"
+                    android:layout_gravity="center"/>
+
+            </LinearLayout>
+
+        </com.balysv.materialripple.MaterialRippleLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:background="@drawable/line_white"
+            android:layout_height="25dp" />
+
+        <com.balysv.materialripple.MaterialRippleLayout
+            android:id="@+id/ripple_view_rub"
+            app:mrl_rippleColor="@color/colorPrimaryDark"
+            app:mrl_rippleOverlay="true"
+            app:mrl_rippleAlpha="0.3"
+            app:mrl_rippleHover="true"
+            app:mrl_rippleDuration="150"
+            app:mrl_rippleFadeDuration="75"
+            app:mrl_rippleDelayClick="true"
+            app:mrl_ripplePersistent="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    app:srcCompat="@drawable/flag_russia_dark"
+                    tools:src="@drawable/icon_main_dark"
+                    android:layout_gravity="center"/>
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="36dp"
+                    android:layout_marginRight="36dp"
+                    android:background="@null"
+                    app:srcCompat="@drawable/icon_rb_dark"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorText"
+                    android:textSize="32sp"
+                    android:textStyle="bold"
+                    android:text="@string/rub"
+                    android:layout_gravity="center"/>
+
+            </LinearLayout>
+
+        </com.balysv.materialripple.MaterialRippleLayout>
+
+
+    </LinearLayout>
+
+
+</FrameLayout>
