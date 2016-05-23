@@ -11,12 +11,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.sergey.currencyexchange.R;
+import com.sergey.currencyexchange.model.ApplicationInfo;
 import com.sergey.currencyexchange.model.Bank;
 import com.sergey.currencyexchange.model.BlackMarket;
 import com.sergey.currencyexchange.model.MBank;
 import com.sergey.currencyexchange.model.Nbu;
-import com.sergey.currencyexchange.model.NumberUtils;
+import com.sergey.currencyexchange.model.Utils;
 import com.sergey.currencyexchange.ui.BankListAdapterConv;
+import com.sergey.currencyexchange.ui.Converter;
 
 import java.util.ArrayList;
 
@@ -68,16 +70,16 @@ public class SellFragment extends Fragment {
         blackMarketSell = bundle.getDouble(BlackMarket.class.getCanonicalName());
         bankListSell = bundle.getParcelableArrayList(ArrayList.class.getCanonicalName());
 
-        nbuCurrencyView.setText(String.format("%.2f", NumberUtils.roundResut(nbuCurrency)));
+        nbuCurrencyView.setText(String.format("%.2f", Utils.roundResut(nbuCurrency)));
         nbuSumView.setText("0");
-        mBankCurrencyView.setText(String.format("%.2f", NumberUtils.roundResut(mBankSell)));
+        mBankCurrencyView.setText(String.format("%.2f", Utils.roundResut(mBankSell)));
         mBankSumView.setText("0");
-        blackMarketCurrencyView.setText(String.format("%.2f", NumberUtils.roundResut(blackMarketSell)));
+        blackMarketCurrencyView.setText(String.format("%.2f", Utils.roundResut(blackMarketSell)));
         blackMarketSumView.setText("0");
 
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setFocusable(false);
-        adapter = new BankListAdapterConv(bankListSell, SELLFRAGMENT, getContext());
+        adapter = new BankListAdapterConv(bankListSell, SELLFRAGMENT, ApplicationInfo.getInstance().getCurrencyId(), getContext());
         recyclerView.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
@@ -99,19 +101,19 @@ public class SellFragment extends Fragment {
     public double resultSumNbu(double count)
     {
         nbuSum = count * nbuCurrency;
-        return NumberUtils.roundResut(nbuSum);
+        return Utils.roundResut(nbuSum);
     }
 
     public double resultSumMBank(double count)
     {
         mBankSum = count * mBankSell;
-        return NumberUtils.roundResut(mBankSum);
+        return Utils.roundResut(mBankSum);
     }
 
     public double resultSumBlackM(double count)
     {
         blackMarketSum = count * blackMarketSell;
-        return NumberUtils.roundResut(blackMarketSum);
+        return Utils.roundResut(blackMarketSum);
     }
 
     public void refreshAdapter(double count)

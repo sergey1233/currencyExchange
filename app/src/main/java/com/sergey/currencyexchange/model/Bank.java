@@ -7,49 +7,65 @@ import android.os.Parcelable;
  * Created by Sergey on 04.05.2016.
  */
 public class Bank implements Parcelable {
-    private String icon = "bank_icon_";
+    private String icon;
     private String name;
     private String date;
-    private double buy;
-    private double changesBuy = 0;
-    private double sell;
-    private double changesSell = 0;
+    private double buyDollar;
+    private double sellDollar;
+    private double buyEuro;
+    private double sellEuro;
+    private double buyRb;
+    private double sellRb;
+    private double changesBuyDollar = 0;
+    private double changesSellDollar = 0;
+    private double changesBuyEuro = 0;
+    private double changesSellEuro = 0;
+    private double changesBuyRb = 0;
+    private double changesSellRb = 0;
+    private static final int DOLLAR = 0;
+    private static final int EURO = 1;
+    private static final int RB = 2;
 
-    public Bank() {}
 
-    public Bank(String icon, String name)
-    {
+    public Bank(String icon, String name) {
         this.name = name;
-        this.icon += icon;
+        this.icon = icon;
     }
 
-    public Bank(String icon, String name, String date, double buy, double sell)
-    {
+
+    public Bank(String icon, String name, String date, double buyDollar, double sellDollar, double buEuro, double sellEuro, double buyRb, double sellRb) {
         this.date = date;
-        this.icon += icon;
+        this.icon = icon;
         this.name = name;
-        this.buy = buy;
-        this.sell = sell;
+        this.buyDollar = buyDollar;
+        this.sellDollar = sellDollar;
+        this.buyEuro = buEuro;
+        this.sellEuro = sellEuro;
+        this.buyRb = buyRb;
+        this.sellRb = sellRb;
+    }
+
+    public Bank(String icon, String name, String date, double buyDollar, double sellDollar, double buEuro, double sellEuro, double buyRb, double sellRb, double changesBuyDollar, double changesSellDollar, double changesBuyEuro, double changesSellEuro, double changesBuyRb
+    , double changesSellRb) {
+        this.date = date;
+        this.icon = icon;
+        this.name = name;
+        this.buyDollar = buyDollar;
+        this.sellDollar = sellDollar;
+        this.buyEuro = buEuro;
+        this.sellEuro = sellEuro;
+        this.buyRb = buyRb;
+        this.sellRb = sellRb;
+        this.changesBuyDollar = changesBuyDollar;
+        this.changesSellDollar = changesSellDollar;
+        this.changesBuyEuro = changesBuyEuro;
+        this.changesSellEuro = changesSellEuro;
+        this.changesBuyRb = changesBuyRb;
+        this.changesSellRb = changesSellRb;
     }
 
     public String getIcon() {
         return icon;
-    }
-
-    public double getBuy() {
-        return buy;
-    }
-
-    public double getChangesBuy() {
-        return changesBuy;
-    }
-
-    public double getSell() {
-        return sell;
-    }
-
-    public double getChangesSell() {
-        return changesSell;
     }
 
     public String getDate() {
@@ -60,47 +76,96 @@ public class Bank implements Parcelable {
         return name;
     }
 
-    public void setBuy(double buy) {
-        this.buy = buy;
+    public double getBuy(int currencyId) {
+        switch (currencyId)
+        {
+            case DOLLAR:
+                return buyDollar;
+            case EURO:
+                return buyEuro;
+            case RB:
+                return buyRb;
+        }
+        return buyDollar;
     }
 
-
-    public double countBuyChanges(double buy)
-    {
-        return this.buy - buy;
+    public double getSell(int currencyId) {
+        switch (currencyId)
+        {
+            case DOLLAR:
+                return sellDollar;
+            case EURO:
+                return sellEuro;
+            case RB:
+                return sellRb;
+        }
+        return sellDollar;
     }
 
-    public double countSellChanges(double sell)
-    {
-        return this.sell - sell;
+    public double getChangesBuy(int currencyId) {
+        switch (currencyId)
+        {
+            case DOLLAR:
+                return changesBuyDollar;
+            case EURO:
+                return changesBuyEuro;
+            case RB:
+                return changesBuyRb;
+        }
+        return changesBuyDollar;
+    }
+
+    public double getChangesSell(int currencyId) {
+        switch (currencyId)
+        {
+            case DOLLAR:
+                return changesSellDollar;
+            case EURO:
+                return changesSellEuro;
+            case RB:
+                return changesSellRb;
+        }
+        return changesSellDollar;
     }
 
     /* Changes counted from new value to current value */
-    public void countChangesBuy(double buy)
-    {
-        changesBuy = buy - this.buy;
+    public void countChanges(double buyDollar, double sellDollar, double buyEuro, double sellEuro, double buyRb, double sellRb) {
+        changesBuyDollar = buyDollar - this.buyDollar;
+        changesSellDollar = sellDollar - this.sellDollar;
+        changesBuyEuro = buyEuro - this.buyEuro;
+        changesSellEuro = sellEuro - this.sellEuro;
+        changesBuyRb = buyRb - this.buyRb;
+        changesSellRb = sellRb - this.sellRb;
     }
 
-    public void countChangesSell(double sell)
-    {
-        changesSell = sell - this.sell;
-    }
-
-    public void setNewInformation(String date, double buy, double sell)
-    {
-        countChangesBuy(buy);
-        countChangesSell(sell);
+    public void setNewInformation(String date, double buyDollar, double sellDollar, double buyEuro, double sellEuro, double buyRb, double sellRb) {
+        countChanges(buyDollar, sellDollar, buyEuro, sellEuro, buyRb, sellRb);
         this.date = date;
-        this.buy = buy;
-        this.sell = sell;
+        this.buyDollar = buyDollar;
+        this.sellDollar = sellDollar;
+        this.buyEuro = buyEuro;
+        this.sellEuro = sellEuro;
+        this.buyRb = buyRb;
+        this.sellRb = sellRb;
     }
 
 
     protected Bank(Parcel in) {
         icon = in.readString();
         name = in.readString();
-        buy = in.readDouble();
-        sell = in.readDouble();
+        date = in.readString();
+        buyDollar = in.readDouble();
+        sellDollar = in.readDouble();
+        buyEuro = in.readDouble();
+        sellEuro = in.readDouble();
+        buyRb = in.readDouble();
+        sellRb = in.readDouble();
+        changesBuyDollar = in.readDouble();
+        changesSellDollar = in.readDouble();
+        changesBuyEuro = in.readDouble();
+        changesSellEuro = in.readDouble();
+        changesBuyRb = in.readDouble();
+        changesSellRb = in.readDouble();
     }
 
     public static final Creator<Bank> CREATOR = new Creator<Bank>() {
@@ -124,8 +189,19 @@ public class Bank implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(icon);
         dest.writeString(name);
-        dest.writeDouble(buy);
-        dest.writeDouble(sell);
+        dest.writeString(date);
+        dest.writeDouble(buyDollar);
+        dest.writeDouble(sellDollar);
+        dest.writeDouble(buyEuro);
+        dest.writeDouble(sellEuro);
+        dest.writeDouble(buyRb);
+        dest.writeDouble(sellRb);
+        dest.writeDouble(changesBuyDollar);
+        dest.writeDouble(changesSellDollar);
+        dest.writeDouble(changesBuyEuro);
+        dest.writeDouble(changesSellEuro);
+        dest.writeDouble(changesBuyRb);
+        dest.writeDouble(changesSellRb);
     }
 }
 

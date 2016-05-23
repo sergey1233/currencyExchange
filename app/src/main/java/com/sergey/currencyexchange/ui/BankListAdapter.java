@@ -7,13 +7,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sergey.currencyexchange.R;
 import com.sergey.currencyexchange.model.Bank;
-import com.sergey.currencyexchange.model.NumberUtils;
+import com.sergey.currencyexchange.model.Utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,13 +23,15 @@ import java.util.List;
  */
 public class BankListAdapter extends RecyclerView.Adapter<BankListAdapter.ViewHolder> {
 
-    private List<Bank> bankList;
+    private ArrayList<Bank> bankList;
     private Context context;
+    private int currencyId = 0;
     private static final String TAG = "BankListAdapter";
 
-    public BankListAdapter(List<Bank> bankList, Context context)
+    public BankListAdapter(ArrayList<Bank> bankList, int currencyId, Context context)
     {
         this.bankList = bankList;
+        this.currencyId = currencyId;
         this.context = context;
     }
 
@@ -49,19 +53,17 @@ public class BankListAdapter extends RecyclerView.Adapter<BankListAdapter.ViewHo
 
         viewHolder.nameBank.setText(bank.getName());
         viewHolder.bankDate.setText(bank.getDate());
-        viewHolder.bankBuyRate.setText(String.format("%.2f", NumberUtils.roundResut(bank.getBuy())));
-        viewHolder.bankSellRate.setText(String.format("%.2f", NumberUtils.roundResut(bank.getSell())));
+        viewHolder.bankBuyRate.setText(String.format("%.2f", Utils.roundResut(bank.getBuy(currencyId))));
+        viewHolder.bankSellRate.setText(String.format("%.2f", Utils.roundResut(bank.getSell(currencyId))));
         setChangesInfo(viewHolder, bank);
-        if (i == bankList.size() - 1)
+        if (i == bankList.size())
         {
             viewHolder.line_recycle.setVisibility(View.GONE);
         }
     }
 
-    public Drawable getIconBank(Bank bank)
-    {
+    public Drawable getIconBank(Bank bank) {
         String iconName = bank.getIcon();
-        Log.d(TAG, iconName);
         int id = context.getResources().getIdentifier(iconName, "drawable", context.getPackageName());
         Drawable iconBank = context.getResources().getDrawable(id);
 
@@ -78,28 +80,34 @@ public class BankListAdapter extends RecyclerView.Adapter<BankListAdapter.ViewHo
         return position % 2 * 2;
     }
 
-    public void addItemstoList(List<Bank> bankList)
+    public void addItemstoList(ArrayList<Bank> bankList)
     {
         this.bankList = bankList;
     }
 
-    public void setChangesInfo(ViewHolder viewHolder, Bank bank)
+    public void addCurrencyId(int currencyId)
     {
-        if (bank.getChangesBuy() != 0)
+        this.currencyId = currencyId;
+    }
+
+    public void setChangesInfo(ViewHolder viewHolder, Bank bank) {
+        if (bank.getChangesBuy(currencyId) != 0)
         {
-            if (bank.getChangesBuy() < 0)
+            if (bank.getChangesBuy(currencyId) < 0)
             {
+                viewHolder.bank_buy_changes_img_up.setVisibility(View.INVISIBLE);
                 viewHolder.bank_buy_changes_img_down.setVisibility(View.VISIBLE);
             }
             else
             {
                 viewHolder.bank_buy_changes_img_up.setVisibility(View.VISIBLE);
+                viewHolder.bank_buy_changes_img_down.setVisibility(View.INVISIBLE);
             }
         }
 
-        if (bank.getChangesSell() != 0)
+        if (bank.getChangesSell(currencyId) != 0)
         {
-            if (bank.getChangesSell() < 0)
+            if (bank.getChangesSell(currencyId) < 0)
             {
                 viewHolder.bank_sell_changes_img_down.setVisibility(View.VISIBLE);
             }

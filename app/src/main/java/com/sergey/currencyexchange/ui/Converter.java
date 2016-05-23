@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -22,13 +23,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sergey.currencyexchange.R;
+import com.sergey.currencyexchange.model.ApplicationInfo;
 import com.sergey.currencyexchange.model.Bank;
 import com.sergey.currencyexchange.model.BlackMarket;
 import com.sergey.currencyexchange.model.MBank;
 import com.sergey.currencyexchange.model.Nbu;
-import com.sergey.currencyexchange.model.NumberUtils;
+import com.sergey.currencyexchange.model.Utils;
 import com.sergey.currencyexchange.ui.fragment.BuyFragment;
-import com.sergey.currencyexchange.ui.fragment.SelectCurrencyFragment;
 import com.sergey.currencyexchange.ui.fragment.SellFragment;
 import com.sergey.currencyexchange.ui.widgets.WrapContentHeightViewPager;
 
@@ -41,12 +42,11 @@ import java.util.List;
 public class Converter extends AppCompatActivity {
 
     private static final String TAG = "Converter:";
-    private final static int ACTID = 1;
+    private static final int TYPEACTIVITY = 1;
 
     private ImageButton mainToolBarImage;
     private ImageButton converterToolBarImage;
     private ImageButton iconCurrencyToolbar;
-
     private ImageView flagFrom;
     private ImageView flagTo;
     private ImageView currencyFrom;
@@ -63,8 +63,8 @@ public class Converter extends AppCompatActivity {
     private WrapContentHeightViewPager viewPager;
     private BuyFragment buyFragment;
     private SellFragment sellFragment;
-    private SelectCurrencyFragment selectCurrencyFragment;
 
+    private int ACTID; // 0 - MainActivity;
     private Nbu nbu;
     private MBank mBank;
     private BlackMarket blackMarket;
@@ -86,12 +86,9 @@ public class Converter extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.converter);
 
-        //initialization toolbar imagebuttons
         mainToolBarImage = (ImageButton)findViewById(R.id.icon_main_toolbar);
         converterToolBarImage = (ImageButton)findViewById(R.id.icon_converter_toolbar);
         iconCurrencyToolbar = (ImageButton)findViewById(R.id.icon_currency_toolbar);
-
-        //initialization converter views
         flagFrom = (ImageView)findViewById(R.id.flag_from);
         flagTo = (ImageView)findViewById(R.id.flag_to);
         currencyFrom = (ImageView)findViewById(R.id.currency_from);
@@ -102,14 +99,9 @@ public class Converter extends AppCompatActivity {
         buttonCounted = (Button)findViewById(R.id.button_counted);
         imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
-        //set default icons
-        setDollarToGrn();
+
         flagTo.setImageResource(R.drawable.flag_ukraine_dark);
         currencyTo.setImageResource(R.drawable.icon_grn_dark);
-
-
-        //get and transfer buy and sell currency from MainActivity to Fragments
-        transferCurrencyRates();
 
         countFromEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -146,25 +138,53 @@ public class Converter extends AppCompatActivity {
             }
         });
 
-
-
-        //Toolbar actions
         converterToolBarImage.setColorFilter(Color.argb(255, 255, 255, 255));
         mainToolBarImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Converter.this, MainActivity.class);
-                intent.putExtra("currencyId", getCurrencyId());
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-                intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                startActivity(intent);
+                onBackPressed();
             }
         });
 
-        Bundle args = new Bundle();
-        args.putInt("fromActivity", ACTID);
-        selectCurrencyFragment = new SelectCurrencyFragment();
-        selectCurrencyFragment.setArguments(args);
+        iconCurrencyToolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Converter.this, SelectCurrency.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(intent);
+            }
+        });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart");
+        currencyId = ApplicationInfo.getInstance().getCurrencyId();
+        nbu = ApplicationInfo.getInstance().getNbu();
+        mBank = ApplicationInfo.getInstance().getMBank();
+        blackMarket = ApplicationInfo.getInstance().getBlackMarket();
+        bankList = ApplicationInfo.getInstance().getBankList();
+
+        nbuRate = nbu.getRate(currencyId);
+        mBankBuy = mBank.getBuy(currencyId);
+        mBankSell = mBank.getSell(currencyId);
+        blackMarketBuy = blackMarket.getBuy(currencyId);
+        blackMarketSell = blackMarket.getSell(currencyId);
+
+
+        bundleBuy = new Bundle();
+        bundleBuy.putDouble(Nbu.class.getCanonicalName(), nbuRate);
+        bundleBuy.putDouble(MBank.class.getCanonicalName(), mBankBuy);
+        bundleBuy.putDouble(BlackMarket.class.getCanonicalName(), blackMarketBuy);
+        bundleBuy.putParcelableArrayList(ArrayList.class.getCanonicalName(), bankList);
+
+        bundleSell = new Bundle();
+        bundleSell.putDouble(Nbu.class.getCanonicalName(), nbuRate);
+        bundleSell.putDouble(MBank.class.getCanonicalName(), mBankSell);
+        bundleSell.putDouble(BlackMarket.class.getCanonicalName(), blackMarketSell);
+        bundleSell.putParcelableArrayList(ArrayList.class.getCanonicalName(), bankList);
+
 
         switch (currencyId)
         {
@@ -186,19 +206,6 @@ public class Converter extends AppCompatActivity {
         }
 
 
-        iconCurrencyToolbar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String tag = selectCurrencyFragment.getClass().getSimpleName();
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_container, selectCurrencyFragment, tag)
-                        .addToBackStack(tag)
-                        .commit();
-            }
-        });
-
-
         buyFragment = new BuyFragment();
         buyFragment.setArguments(bundleBuy);
         sellFragment = new SellFragment();
@@ -209,55 +216,8 @@ public class Converter extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    public void transferCurrencyRates() {
-        currencyId = (int)getIntent().getIntExtra("currencyId", 0);
-        nbu = (Nbu)getIntent().getParcelableExtra(Nbu.class.getCanonicalName());
-        mBank = (MBank)getIntent().getParcelableExtra(MBank.class.getCanonicalName());
-        blackMarket = (BlackMarket)getIntent().getParcelableExtra(BlackMarket.class.getCanonicalName());
-        bankList = (ArrayList)getIntent().getParcelableArrayListExtra(ArrayList.class.getCanonicalName());
-
-        nbuRate = nbu.getRate();
-        mBankBuy = mBank.getBuy();
-        mBankSell = mBank.getSell();
-        blackMarketBuy = blackMarket.getBuy();
-        blackMarketSell = blackMarket.getSell();
-
-
-        bundleBuy = new Bundle();
-        bundleBuy.putDouble(Nbu.class.getCanonicalName(), nbuRate);
-        bundleBuy.putDouble(MBank.class.getCanonicalName(), mBankBuy);
-        bundleBuy.putDouble(BlackMarket.class.getCanonicalName(), blackMarketBuy);
-        bundleBuy.putParcelableArrayList(ArrayList.class.getCanonicalName(), bankList);
-
-        bundleSell = new Bundle();
-        bundleSell.putDouble(Nbu.class.getCanonicalName(), nbuRate);
-        bundleSell.putDouble(MBank.class.getCanonicalName(), mBankSell);
-        bundleSell.putDouble(BlackMarket.class.getCanonicalName(), blackMarketSell);
-        bundleSell.putParcelableArrayList(ArrayList.class.getCanonicalName(), bankList);
-    }
-
-    public void setDollarToGrn() {
-        flagFrom.setImageResource(R.drawable.flag_usa_dark);
-        currencyFrom.setImageResource(R.drawable.icon_dollar_dark);
-    }
-
-    public void setEuroToGrn() {
-        flagFrom.setImageResource(R.drawable.flag_usa_dark);
-        currencyFrom.setImageResource(R.drawable.icon_dollar_dark);
-    }
-
-
     public Double getResult(double countFrom, double currencyExchange) {
-        return NumberUtils.roundResut(countFrom * currencyExchange);
-    }
-
-    public boolean isDigit(String string) {
-        try {
-            Double.parseDouble(string);
-        } catch (Exception e) {
-            return false;
-        }
-        return true;
+        return Utils.roundResut(countFrom * currencyExchange);
     }
 
     //processing, pressing the keypad button
@@ -280,7 +240,7 @@ public class Converter extends AppCompatActivity {
     public void resultOutput() {
         if (countFromEdit.getText() != null)
         {
-            if (isDigit(countFromEdit.getText().toString())) {
+            if (Utils.isDigit(countFromEdit.getText().toString())) {
                 countFrom = Double.parseDouble(countFromEdit.getText().toString());
                 buyFragment.setSumInfo(countFrom);
                 sellFragment.setSumInfo(countFrom);
@@ -292,7 +252,7 @@ public class Converter extends AppCompatActivity {
 
             if (currencyExchangeEdit.getText() != null)
             {
-                if (isDigit(currencyExchangeEdit.getText().toString()) == true)
+                if (Utils.isDigit(currencyExchangeEdit.getText().toString()) == true)
                 {
                     currencyExchange = Double.parseDouble(currencyExchangeEdit.getText().toString());
                     countToResult.setText(String.format("%.2f", getResult(countFrom, currencyExchange)));
@@ -336,29 +296,9 @@ public class Converter extends AppCompatActivity {
             mFragmentTitleList.add(title);
         }
 
-        public Fragment getFragmentBuy()
-        {
-            return mFragmentList.get(0);
-        }
-
-        public Fragment getFragmentSell()
-        {
-            return mFragmentList.get(1);
-        }
-
         @Override
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
         }
-    }
-
-    public static void setCurrencyId(int id)
-    {
-        currencyId = id;
-    }
-
-    public static int getCurrencyId()
-    {
-        return currencyId;
     }
 }

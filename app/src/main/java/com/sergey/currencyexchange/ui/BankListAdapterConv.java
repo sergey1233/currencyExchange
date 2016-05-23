@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.sergey.currencyexchange.R;
 import com.sergey.currencyexchange.model.Bank;
-import com.sergey.currencyexchange.model.NumberUtils;
+import com.sergey.currencyexchange.model.Utils;
 
 import java.util.List;
 
@@ -24,13 +24,15 @@ public class BankListAdapterConv extends RecyclerView.Adapter<BankListAdapterCon
     private List<Bank> bankList;
     private double count;
     private Context context;
+    private int currencyId;
     private static final String TAG = "BankListAdapter";
 
-    public BankListAdapterConv(List<Bank> bankList, int typefragment, Context context)
+    public BankListAdapterConv(List<Bank> bankList, int typefragment, int currencyId, Context context)
     {
         this.bankList = bankList;
         this.typefragment = typefragment;
         this.context = context;
+        this.currencyId = currencyId;
         this.count = 0;
     }
 
@@ -55,13 +57,13 @@ public class BankListAdapterConv extends RecyclerView.Adapter<BankListAdapterCon
         viewHolder.line_recycle.setVisibility(View.VISIBLE);
         if (typefragment == 0)
         {
-            viewHolder.bankCurrency.setText(String.format("%.2f", NumberUtils.roundResut(bank.getBuy())));
-            viewHolder.bankSum.setText(String.format("%.2f", resultSum(count, bank.getBuy())));
+            viewHolder.bankCurrency.setText(String.format("%.2f", Utils.roundResut(bank.getBuy(currencyId))));
+            viewHolder.bankSum.setText(String.format("%.2f", resultSum(count, bank.getBuy(currencyId))));
         }
         else
         {
-            viewHolder.bankCurrency.setText(String.format("%.2f", NumberUtils.roundResut(bank.getSell())));
-            viewHolder.bankSum.setText(String.format("%.2f", resultSum(count, bank.getSell())));
+            viewHolder.bankCurrency.setText(String.format("%.2f", Utils.roundResut(bank.getSell(currencyId))));
+            viewHolder.bankSum.setText(String.format("%.2f", resultSum(count, bank.getSell(currencyId))));
         }
 
         if (i == bankList.size() - 1)
@@ -72,7 +74,7 @@ public class BankListAdapterConv extends RecyclerView.Adapter<BankListAdapterCon
 
     public double resultSum(double count, double currency)
     {
-        return NumberUtils.roundResut(count * currency);
+        return Utils.roundResut(count * currency);
     }
 
     public Drawable getIconBank(Bank bank)
