@@ -16,6 +16,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.internal.ObjectConstructor;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
@@ -26,10 +29,18 @@ import com.sergey.currencyexchange.model.Bank;
 import com.sergey.currencyexchange.model.BlackMarket;
 import com.sergey.currencyexchange.model.MBank;
 import com.sergey.currencyexchange.model.Nbu;
+import com.sergey.currencyexchange.model.NbuInterface;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.GsonConverterFactory;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton mainToolBarImage;
     private ImageButton converterToolBarImage;
     private ImageButton iconCurrencyToolbar;
+    private ImageButton loadToolBarImage;
     private TextView nbuRate;
     private TextView nbuChangesText;
     private TextView nbuDate;
@@ -73,6 +85,13 @@ public class MainActivity extends AppCompatActivity {
     private BankListAdapter adapter;
     private static int currencyId = 0;//0 - usd; 1 - eur; 2 - rub;
 
+    private static final String URL = "http://currencyexchange.zzz.com.ua";
+    private Gson gson = new GsonBuilder().create();
+    private Retrofit retrofit = new Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .baseUrl(URL)
+            .build();
+    private NbuInterface intf = retrofit.create(NbuInterface.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
         mainToolBarImage = (ImageButton)findViewById(R.id.icon_main_toolbar);
         converterToolBarImage = (ImageButton)findViewById(R.id.icon_converter_toolbar);
         iconCurrencyToolbar = (ImageButton)findViewById(R.id.icon_currency_toolbar);
+        loadToolBarImage = (ImageButton)findViewById(R.id.icon_load_toolbar);
         nbuRate = (TextView)findViewById(R.id.nbu_rate);
         nbuChangesText = (TextView)findViewById(R.id.nbu_changes_text);
         nbuDate = (TextView)findViewById(R.id.nbu_date);
@@ -141,6 +161,22 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, SelectCurrency.class);
                 intent.putExtra("fromActivity", TYPEACTIVITY);
                 startActivity(intent);
+            }
+        });
+        loadToolBarImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Call<Object> call = intf.request(Nbu.getUrlType());
+                try {
+                    Response<Object> response = call.execute();
+                    Map<String, String> map = gson.fromJson(response.body().toString(), Map.class);
+                    for (Map.Entry e : map.entrySet()) {
+                        Log.d(TAG, e.getKey() + " => " + e.getValue());
+                    }
+                }
+                catch (IOException ioe) {
+                    ioe.printStackTrace();
+                }
             }
         });
     }
@@ -231,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
     public void banksTest() {
         Bank PrivatB = new Bank("bank_icon_privat", getString(R.string.privat));
         Bank OshadB = new Bank("bank_icon_oshad", getString(R.string.oshad));
-        Bank SberB = new Bank("bank_icon_privat", getString(R.string.sber_bank));
+        Bank SberB = new Bank("bank_icon_sber", getString(R.string.sber_bank));
         Bank RaiphB = new Bank("bank_icon_raif", getString(R.string.raif));
         Bank UkrsotsB = new Bank("bank_icon_ukrsots", getString(R.string.ukrsots));
         Bank AlphaB = new Bank("bank_icon_alpha_bank", getString(R.string.alpha_bank));

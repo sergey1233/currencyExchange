@@ -6,7 +6,12 @@ import android.os.Parcelable;
 /**
  * Created by Sergey on 04.05.2016.
  */
-public class Nbu implements Parcelable {
+public class Nbu {
+
+    private static final int DOLLAR = 0;
+    private static final int EURO = 1;
+    private static final int RB = 2;
+    private static final String URLTYPE = "/app_response_nbu.php";
 
     private double rateDollar;
     private double rateEuro;
@@ -15,9 +20,7 @@ public class Nbu implements Parcelable {
     private double changesDollar = 0;
     private double changesEuro = 0;
     private double changesRb = 0;
-    private static final int DOLLAR = 0;
-    private static final int EURO = 1;
-    private static final int RB = 2;
+
 
     public Nbu (String date, double rateDollar, double rateEuro, double rateRb) {
         this.date = date;
@@ -71,33 +74,7 @@ public class Nbu implements Parcelable {
         this.date = date;
     }
 
-    protected Nbu(Parcel in) {
-        rateDollar = in.readDouble();
-        rateEuro = in.readDouble();
-        rateRb = in.readDouble();
-    }
-
-    public static final Creator<Nbu> CREATOR = new Creator<Nbu>() {
-        @Override
-        public Nbu createFromParcel(Parcel in) {
-            return new Nbu(in);
-        }
-
-        @Override
-        public Nbu[] newArray(int size) {
-            return new Nbu[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeDouble(rateDollar);
-        dest.writeDouble(rateEuro);
-        dest.writeDouble(rateRb);
+    public static String getUrlType() {
+        return URLTYPE;
     }
 }
