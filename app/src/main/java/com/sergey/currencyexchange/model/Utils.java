@@ -2,18 +2,16 @@ package com.sergey.currencyexchange.model;
 
 import java.util.ArrayList;
 
-/**
- * Created by Sergey on 16.05.2016.
- */
 public class Utils {
 
     public static double roundResut(double number)
     {
-        double result = number * 100;
+        double result = number * 10000;
         int i = (int)Math.round(result);
-        result = (double)i/100;
+        result = (double)i/10000;
         return result;
     }
+
 
     public static double[] toPrimitiveDoubleArray(ArrayList<Double> array) {
         double[] target = new double[array.size()];

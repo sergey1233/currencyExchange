@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">CurrencyExchange</string>
+    <string name="app_label">Курс валют</string>
     <string name="action_settings">Settings</string>
     <string name="country">Из какой Вы страны?</string>
     <string name="ukraine">Украина</string>
@@ -9,7 +10,7 @@
     <string name="blackM">Черный рынок</string>
     <string name="banksUkraine">Банки Украины</string>
     <string name="bitcoin">Биткоин</string>
-    <string name="by_exchange">По курсу</string>
+    <string name="by_exchange">Курс</string>
     <string name="counted">Пересчитать</string>
     <string name="buy">Покупка</string>
     <string name="sell">Продажа</string>
@@ -20,14 +21,18 @@
     <string name="eur">EUR</string>
     <string name="rub">RUB</string>
     <string name="privat">ПриватБанк</string>
-    <string name="oshad">ОщадБанк</string>
-    <string name="sber_bank">Сбербанк</string>
+    <string name="oshad">Ощадбанк</string>
+    <string name="sber_bank">СБЕРБАНК</string>
     <string name="raif">Райффайзен Банк Аваль</string>
-    <string name="ukrsots">Укрсоцбанк</string>
+    <string name="ukrsots">Укрсоцбанк UniCredit Bank TM</string>
     <string name="alpha_bank">Альфа-Банк</string>
     <string name="ukrsib">УкрСиббанк</string>
     <string name="pumb">ПУМБ</string>
     <string name="vtb">ВТБ Банк</string>
     <string name="otp">ОТП Банк</string>
     <string name="crediagr">Креди Агриколь Банк</string>
+    <string name="back">Для выхода из прилодения нажмите кнопку "назад" еще раз</string>
+    <string name="set_own_currency">Ввести произвольный курс</string>
+    <string name="hide_own_currency">Спрятать произвольный курс</string>
+    <string name="too_big">Очень много, введите что то поменьше</string>
 </resources>

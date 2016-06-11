@@ -14,11 +14,9 @@ import com.sergey.currencyexchange.R;
 import com.sergey.currencyexchange.model.Bank;
 import com.sergey.currencyexchange.model.Utils;
 
+import java.math.BigDecimal;
 import java.util.List;
 
-/**
- * Created by Sergey on 16.05.2016.
- */
 public class BankListAdapterConv extends RecyclerView.Adapter<BankListAdapterConv.ViewHolder> {
     private int typefragment; //0 - buy; 1 - sell;
     private List<Bank> bankList;
@@ -53,7 +51,12 @@ public class BankListAdapterConv extends RecyclerView.Adapter<BankListAdapterCon
         }
         catch (Exception e) {}
 
-        viewHolder.nameBank.setText(bank.getName());
+        if (bank.getName().equals("Укрсоцбанк UniCredit Bank TM")) {
+            viewHolder.nameBank.setText(bank.getName().substring(0, 10));
+        }
+        else {
+            viewHolder.nameBank.setText(bank.getName());
+        }
         viewHolder.line_recycle.setVisibility(View.VISIBLE);
         if (typefragment == 0)
         {
@@ -65,16 +68,12 @@ public class BankListAdapterConv extends RecyclerView.Adapter<BankListAdapterCon
             viewHolder.bankCurrency.setText(String.format("%.2f", Utils.roundResut(bank.getSell(currencyId))));
             viewHolder.bankSum.setText(String.format("%.2f", resultSum(count, bank.getSell(currencyId))));
         }
-
-        if (i == bankList.size() - 1)
-        {
-            viewHolder.line_recycle.setVisibility(View.GONE);
-        }
     }
 
-    public double resultSum(double count, double currency)
+    public BigDecimal resultSum(double count, double currency)
     {
-        return Utils.roundResut(count * currency);
+        BigDecimal x = BigDecimal.valueOf(count * currency);
+        return x;
     }
 
     public Drawable getIconBank(Bank bank)

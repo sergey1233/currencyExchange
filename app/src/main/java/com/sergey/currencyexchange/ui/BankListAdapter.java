@@ -3,24 +3,18 @@ package com.sergey.currencyexchange.ui;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sergey.currencyexchange.R;
 import com.sergey.currencyexchange.model.Bank;
 import com.sergey.currencyexchange.model.Utils;
-
 import java.util.ArrayList;
-import java.util.List;
 
-/**
- * Created by Sergey on 04.05.2016.
- */
+
 public class BankListAdapter extends RecyclerView.Adapter<BankListAdapter.ViewHolder> {
 
     private ArrayList<Bank> bankList;
@@ -51,7 +45,12 @@ public class BankListAdapter extends RecyclerView.Adapter<BankListAdapter.ViewHo
         }
         catch (Exception e) {}
 
-        viewHolder.nameBank.setText(bank.getName());
+        if (bank.getName().equals("Укрсоцбанк UniCredit Bank TM")) {
+            viewHolder.nameBank.setText(bank.getName().substring(0, 10));
+        }
+        else {
+            viewHolder.nameBank.setText(bank.getName());
+        }
         viewHolder.bankDate.setText(bank.getDate());
         viewHolder.bankBuyRate.setText(String.format("%.2f", Utils.roundResut(bank.getBuy(currencyId))));
         viewHolder.bankSellRate.setText(String.format("%.2f", Utils.roundResut(bank.getSell(currencyId))));
@@ -109,11 +108,13 @@ public class BankListAdapter extends RecyclerView.Adapter<BankListAdapter.ViewHo
         {
             if (bank.getChangesSell(currencyId) < 0)
             {
+                viewHolder.bank_sell_changes_img_up.setVisibility(View.INVISIBLE);
                 viewHolder.bank_sell_changes_img_down.setVisibility(View.VISIBLE);
             }
             else
             {
                 viewHolder.bank_sell_changes_img_up.setVisibility(View.VISIBLE);
+                viewHolder.bank_sell_changes_img_down.setVisibility(View.INVISIBLE);
             }
         }
     }

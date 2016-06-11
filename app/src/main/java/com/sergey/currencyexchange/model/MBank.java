@@ -1,16 +1,10 @@
 package com.sergey.currencyexchange.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 
-import java.util.ArrayList;
-import java.util.StringTokenizer;
+public class MBank {
 
-/**
- * Created by Sergey on 04.05.2016.
- */
-public class MBank implements Parcelable{
-
+    private static final String URLTYPE = "app_response_mb.php";
+    private static final int[] idTimeArray = {10, 11, 12, 13, 14, 15, 16, 17};
     private String[] dateArray;
     private double[] buyArrayDollar;
     private double[] sellArrayDollar;
@@ -35,32 +29,20 @@ public class MBank implements Parcelable{
     private static final int EURO = 1;
     private static final int RB = 2;
 
-
-    public MBank(String[] dateArray, double[] buyArrayDollar, double[] sellArrayDollar, double[] buyArrayEuro, double[] sellArrayEuro, double[] buyArrayRb, double[] sellArrayRb) {
-        this.dateArray = dateArray;
-        this.buyArrayDollar = buyArrayDollar;
-        this.sellArrayDollar = sellArrayDollar;
-        this.buyArrayEuro = buyArrayEuro;
-        this.sellArrayEuro = sellArrayEuro;
-        this.buyArrayRb = buyArrayRb;
-        this.sellArrayRb = sellArrayRb;
-
-        this.date = dateArray[dateArray.length - 1];
-        this.buyDollar = buyArrayDollar[buyArrayDollar.length - 1];
-        this.sellDollar = sellArrayDollar[sellArrayDollar.length - 1];
-        this.buyEuro = buyArrayEuro[buyArrayEuro.length - 1];
-        this.sellEuro = sellArrayEuro[sellArrayEuro.length - 1];
-        this.buyRb = buyArrayRb[buyArrayRb.length - 1];
-        this.sellRb = sellArrayRb[sellArrayRb.length - 1];
+    public MBank() {
+        this.dateArray = new String[0];
+        this.buyArrayDollar = new double[0];
+        this.sellArrayDollar = new double[0];
+        this.buyArrayEuro = new double[0];
+        this.sellArrayEuro = new double[0];
+        this.buyArrayRb = new double[0];
+        this.sellArrayRb = new double[0];
     }
 
     public String getDate() {
         return date;
     }
 
-    public String[] getDateArray() {
-        return dateArray;
-    }
 
     public double getBuy(int currencyId) {
         switch (currencyId)
@@ -75,18 +57,6 @@ public class MBank implements Parcelable{
         return buyDollar;
     }
 
-    public double[] getBuyArray(int currencyId) {
-        switch (currencyId)
-        {
-            case DOLLAR:
-                return buyArrayDollar;
-            case EURO:
-                return buyArrayEuro;
-            case RB:
-                return buyArrayRb;
-        }
-        return buyArrayDollar;
-    }
 
     public double getSell(int currencyId) {
         switch (currencyId)
@@ -101,18 +71,6 @@ public class MBank implements Parcelable{
         return sellDollar;
     }
 
-    public double[] getSellArray(int currencyId) {
-        switch (currencyId)
-        {
-            case DOLLAR:
-                return sellArrayDollar;
-            case EURO:
-                return sellArrayEuro;
-            case RB:
-                return sellArrayRb;
-        }
-        return sellArrayDollar;
-    }
 
     public double getChangesBuy(int currencyId) {
         countChangesBuy();
@@ -182,63 +140,79 @@ public class MBank implements Parcelable{
         this.buyArrayRb = buyArrayRb;
         this.sellArrayRb = sellArrayRb;
 
-        this.date = dateArray[dateArray.length - 1];
-        this.buyDollar = buyArrayDollar[buyArrayDollar.length - 1];
-        this.sellDollar = sellArrayDollar[sellArrayDollar.length - 1];
-        this.buyEuro = buyArrayEuro[buyArrayEuro.length - 1];
-        this.sellEuro = sellArrayEuro[sellArrayEuro.length - 1];
-        this.buyRb = buyArrayRb[buyArrayRb.length - 1];
-        this.sellRb = sellArrayRb[sellArrayRb.length - 1];
-    }
-
-
-    protected MBank(Parcel in) {
-        date = in.readString();
-        buyDollar = in.readDouble();
-        sellDollar = in.readDouble();
-        buyEuro = in.readDouble();
-        sellEuro = in.readDouble();
-        buyRb = in.readDouble();
-        sellRb = in.readDouble();
-        buyArrayDollar = in.createDoubleArray();
-        sellArrayDollar = in.createDoubleArray();
-        buyArrayEuro = in.createDoubleArray();
-        sellArrayEuro = in.createDoubleArray();
-        buyArrayRb = in.createDoubleArray();
-        sellArrayRb = in.createDoubleArray();
-    }
-
-    public static final Creator<MBank> CREATOR = new Creator<MBank>() {
-        @Override
-        public MBank createFromParcel(Parcel in) {
-            return new MBank(in);
+        if (dateArray.length == 0) {
+            this.date = "нет информации";
+        }
+        else if (dateArray.length < 2) {
+            this.date = dateArray[0];
+        }
+        else {
+            this.date = dateArray[dateArray.length - 1];
         }
 
-        @Override
-        public MBank[] newArray(int size) {
-            return new MBank[size];
+        if (buyArrayDollar.length == 0) {
+            this.buyDollar = 0;
         }
-    };
+        else if (buyArrayDollar.length < 2) {
+            this.buyDollar = buyArrayDollar[0];
+        }
+        else {
+            this.buyDollar = buyArrayDollar[buyArrayDollar.length - 1];
+        }
 
-    @Override
-    public int describeContents() {
-        return 0;
+        if (sellArrayDollar.length == 0) {
+            this.sellDollar = 0;
+        }
+        else if (sellArrayDollar.length < 2) {
+            this.sellDollar = sellArrayDollar[0];
+        }
+        else {
+            this.sellDollar = sellArrayDollar[sellArrayDollar.length - 1];
+        }
+
+        if (buyArrayEuro.length == 0) {
+            this.buyEuro = 0;
+        }
+        else if (buyArrayEuro.length < 2) {
+            this.buyEuro = buyArrayEuro[0];
+        }
+        else {
+            this.buyEuro = buyArrayEuro[buyArrayEuro.length - 1];
+        }
+
+        if (sellArrayEuro.length == 0) {
+            this.sellEuro = 0;
+        }
+        else if (sellArrayEuro.length < 2) {
+            this.sellEuro = sellArrayEuro[0];
+        }
+        else {
+            this.sellEuro = sellArrayEuro[sellArrayEuro.length - 1];
+        }
+
+
+        if (buyArrayRb.length == 0) {
+            this.buyRb = 0;
+        }
+        else if (buyArrayRb.length < 2) {
+            this.buyRb = buyArrayRb[0];
+        }
+        else {
+            this.buyRb = buyArrayRb[buyArrayRb.length - 1];
+        }
+
+        if (sellArrayRb.length == 0) {
+            this.sellRb = 0;
+        }
+        else if (sellArrayRb.length < 2) {
+            this.sellRb = sellArrayRb[0];
+        }
+        else {
+            this.sellRb = sellArrayRb[sellArrayRb.length - 1];
+        }
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(date);
-        dest.writeDouble(buyDollar);
-        dest.writeDouble(sellDollar);
-        dest.writeDouble(buyEuro);
-        dest.writeDouble(sellEuro);
-        dest.writeDouble(buyRb);
-        dest.writeDouble(sellRb);
-        dest.writeDoubleArray(buyArrayDollar);
-        dest.writeDoubleArray(sellArrayDollar);
-        dest.writeDoubleArray(buyArrayEuro);
-        dest.writeDoubleArray(sellArrayEuro);
-        dest.writeDoubleArray(buyArrayRb);
-        dest.writeDoubleArray(sellArrayRb);
+    public static String getUrlType() {
+        return URLTYPE;
     }
 }

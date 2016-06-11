@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -19,9 +18,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.sergey.currencyexchange.R;
 import com.sergey.currencyexchange.model.ApplicationInfo;
 import com.sergey.currencyexchange.model.Bank;
@@ -32,14 +31,12 @@ import com.sergey.currencyexchange.model.Utils;
 import com.sergey.currencyexchange.ui.fragment.BuyFragment;
 import com.sergey.currencyexchange.ui.fragment.SellFragment;
 import com.sergey.currencyexchange.ui.widgets.WrapContentHeightViewPager;
-
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Sergey on 05.05.2016.
- */
-public class Converter extends AppCompatActivity {
+
+public class Converter extends AppCompatActivity implements TextView.OnEditorActionListener {
 
     private static final String TAG = "Converter:";
     private static final int TYPEACTIVITY = 1;
@@ -54,17 +51,19 @@ public class Converter extends AppCompatActivity {
     private EditText countFromEdit;
     private EditText currencyExchangeEdit;
     private TextView countToResult;
+    private Button set_own_currency;
+    private LinearLayout own_currecny_linear;
+
     private Button buttonCounted;
-    private double countFrom = 0;  //initialization
-    private double currencyExchange = 0; //initialization
-    private int countEditInputs = 0; //initialization
-    private InputMethodManager imm;
+    private double countFrom = 0;
+    private double currencyExchange = 0;
     private TabLayout tabLayout;
     private WrapContentHeightViewPager viewPager;
     private BuyFragment buyFragment;
     private SellFragment sellFragment;
+    private InputMethodManager imm;
 
-    private int ACTID; // 0 - MainActivity;
+    private ApplicationInfo app;
     private Nbu nbu;
     private MBank mBank;
     private BlackMarket blackMarket;
@@ -96,82 +95,28 @@ public class Converter extends AppCompatActivity {
         countFromEdit = (EditText)findViewById(R.id.count_from_edittext);
         currencyExchangeEdit = (EditText)findViewById(R.id.currency_exchange_edittext);
         countToResult = (TextView)findViewById(R.id.count_to_result);
+        set_own_currency = (Button)findViewById(R.id.set_own_currency);
+        own_currecny_linear = (LinearLayout)findViewById(R.id.own_currency_linear);
         buttonCounted = (Button)findViewById(R.id.button_counted);
+
         imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-
-
+        countFromEdit.setOnEditorActionListener(this);
+        currencyExchangeEdit.setOnEditorActionListener(this);
         flagTo.setImageResource(R.drawable.flag_ukraine_dark);
         currencyTo.setImageResource(R.drawable.icon_grn_dark);
 
-        countFromEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (countEditInputs != 0)
-                {
-                    countFromEdit.setImeOptions(EditorInfo.IME_ACTION_DONE);
-                    countStandartKeyButtonDone(countFromEdit);
-                }
-                if (hasFocus)
-                {
-                    countFromEdit.setText("");
-                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-                    countEditInputs++;
-                }
-            }
-        });
-
-        currencyExchangeEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus)
-                {
-                    currencyExchangeEdit.setText("");
-                    countStandartKeyButtonDone(currencyExchangeEdit);
-                }
-            }
-        });
-
-        buttonCounted.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                resultOutput();
-            }
-        });
-
-        converterToolBarImage.setColorFilter(Color.argb(255, 255, 255, 255));
-        mainToolBarImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
-        iconCurrencyToolbar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Converter.this, SelectCurrency.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                startActivity(intent);
-            }
-        });
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.d(TAG, "onStart");
-        currencyId = ApplicationInfo.getInstance().getCurrencyId();
-        nbu = ApplicationInfo.getInstance().getNbu();
-        mBank = ApplicationInfo.getInstance().getMBank();
-        blackMarket = ApplicationInfo.getInstance().getBlackMarket();
-        bankList = ApplicationInfo.getInstance().getBankList();
+        app = ApplicationInfo.getInstance();
+        currencyId = app.getCurrencyId();
+        nbu = app.getNbu();
+        mBank = app.getMBank();
+        blackMarket = app.getBlackMarket();
+        bankList = app.getBankList();
 
         nbuRate = nbu.getRate(currencyId);
         mBankBuy = mBank.getBuy(currencyId);
         mBankSell = mBank.getSell(currencyId);
         blackMarketBuy = blackMarket.getBuy(currencyId);
         blackMarketSell = blackMarket.getSell(currencyId);
-
 
         bundleBuy = new Bundle();
         bundleBuy.putDouble(Nbu.class.getCanonicalName(), nbuRate);
@@ -185,6 +130,14 @@ public class Converter extends AppCompatActivity {
         bundleSell.putDouble(BlackMarket.class.getCanonicalName(), blackMarketSell);
         bundleSell.putParcelableArrayList(ArrayList.class.getCanonicalName(), bankList);
 
+        buyFragment = new BuyFragment();
+        buyFragment.setArguments(bundleBuy);
+        sellFragment = new SellFragment();
+        sellFragment.setArguments(bundleSell);
+        viewPager = (WrapContentHeightViewPager)findViewById(R.id.viewpager);
+        setupViewPager(viewPager);
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
 
         switch (currencyId)
         {
@@ -205,35 +158,70 @@ public class Converter extends AppCompatActivity {
                 break;
         }
 
-
-        buyFragment = new BuyFragment();
-        buyFragment.setArguments(bundleBuy);
-        sellFragment = new SellFragment();
-        sellFragment.setArguments(bundleSell);
-        viewPager = (WrapContentHeightViewPager)findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
-    }
-
-    public Double getResult(double countFrom, double currencyExchange) {
-        return Utils.roundResut(countFrom * currencyExchange);
-    }
-
-    //processing, pressing the keypad button
-    public void countStandartKeyButtonDone(EditText editText) {
-        editText.setOnEditorActionListener(new TextView.OnEditorActionListener()
-        {
+        countFromEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
-            {
-                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE))
-                {
-                    resultOutput();
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    countFromEdit.setText("");
                 }
-                return false;
             }
         });
+        currencyExchangeEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    currencyExchangeEdit.setText("");
+                }
+            }
+        });
+
+        buttonCounted.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resultOutput();
+                imm.hideSoftInputFromWindow(buttonCounted.getWindowToken(),
+                        InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+        });
+
+        set_own_currency.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (own_currecny_linear.getVisibility() == View.GONE) {
+                    own_currecny_linear.setVisibility(View.VISIBLE);
+                    set_own_currency.setText(R.string.hide_own_currency);
+                    currencyExchangeEdit.setText(String.valueOf(nbuRate));
+                }
+                else {
+                    own_currecny_linear.setVisibility(View.GONE);
+                    set_own_currency.setText(R.string.set_own_currency);
+                }
+            }
+        });
+
+        converterToolBarImage.setColorFilter(Color.argb(255, 255, 255, 255));
+        mainToolBarImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Converter.this, MainActivity.class);
+                intent.putExtra("fromActivity", TYPEACTIVITY);
+                startActivity(intent);
+            }
+        });
+
+        iconCurrencyToolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Converter.this, SelectCurrency.class);
+                intent.putExtra("fromActivity", TYPEACTIVITY);
+                startActivity(intent);
+            }
+        });
+    }
+
+    public BigDecimal getResult(double countFrom, double currencyExchange) {
+        BigDecimal x = BigDecimal.valueOf(countFrom * currencyExchange);
+        return x;
     }
 
     //result output to textview, and hide keyboard
@@ -241,29 +229,47 @@ public class Converter extends AppCompatActivity {
         if (countFromEdit.getText() != null)
         {
             if (Utils.isDigit(countFromEdit.getText().toString())) {
-                countFrom = Double.parseDouble(countFromEdit.getText().toString());
-                buyFragment.setSumInfo(countFrom);
-                sellFragment.setSumInfo(countFrom);
+                if (getResult(countFrom, currencyExchange).doubleValue() < 9999999) {
+                    countFrom = Double.parseDouble(countFromEdit.getText().toString());
+                    buyFragment.setSumInfo(countFrom);
+                    sellFragment.setSumInfo(countFrom);
+                }
+                else {
+                    Toast.makeText(Converter.this, getText(R.string.too_big), Toast.LENGTH_SHORT).show();
+                }
             }
             else
             {
                 Toast.makeText(Converter.this, getText(R.string.exception_count), Toast.LENGTH_SHORT).show();
             }
 
-            if (currencyExchangeEdit.getText() != null)
-            {
-                if (Utils.isDigit(currencyExchangeEdit.getText().toString()) == true)
-                {
-                    currencyExchange = Double.parseDouble(currencyExchangeEdit.getText().toString());
-                    countToResult.setText(String.format("%.2f", getResult(countFrom, currencyExchange)));
-                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-                }
-                else
-                {
-                    Toast.makeText(Converter.this, getText(R.string.exception_currency), Toast.LENGTH_SHORT).show();
+            if (own_currecny_linear.getVisibility() == View.VISIBLE) {
+                if (currencyExchangeEdit.getText() != null) {
+                    if (Utils.isDigit(currencyExchangeEdit.getText().toString()) == true)
+                    {
+                        currencyExchange = Double.parseDouble(currencyExchangeEdit.getText().toString());
+                        if (getResult(countFrom, currencyExchange).doubleValue() < 9999999) {
+                            countToResult.setText(String.format("%.2f", getResult(countFrom, currencyExchange)));
+                        }
+                        else {
+                            Toast.makeText(Converter.this, getText(R.string.too_big), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    else
+                    {
+                        Toast.makeText(Converter.this, getText(R.string.exception_currency), Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         }
+    }
+
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_DONE) {
+            resultOutput();
+        }
+        return false;
     }
 
     private void setupViewPager(ViewPager viewPager) {

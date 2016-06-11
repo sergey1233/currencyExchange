@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +19,11 @@ import com.sergey.currencyexchange.model.MBank;
 import com.sergey.currencyexchange.model.Nbu;
 import com.sergey.currencyexchange.model.Utils;
 import com.sergey.currencyexchange.ui.BankListAdapterConv;
-import com.sergey.currencyexchange.ui.Converter;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
-/**
- * Created by Sergey on 11.05.2016.
- */
+
 public class BuyFragment extends Fragment {
 
 
@@ -43,9 +42,6 @@ public class BuyFragment extends Fragment {
     private double blackMarketBuy;
     private ArrayList<Bank> bankListBuy;
 
-    private double nbuSum;
-    private double mBankSum;
-    private double blackMarketSum;
 
     private static final int BUYFRAGMENT = 0;
 
@@ -72,9 +68,9 @@ public class BuyFragment extends Fragment {
         blackMarketBuy = bundle.getDouble(BlackMarket.class.getCanonicalName());
         bankListBuy = bundle.getParcelableArrayList(ArrayList.class.getCanonicalName());
 
-        nbuCurrencyView.setText(String.format("%.2f", Utils.roundResut(nbuCurrency)));
+        nbuCurrencyView.setText(String.format("%.4f", Utils.roundResut(nbuCurrency)));
         nbuSumView.setText("0");
-        mBankCurrencyView.setText(String.format("%.2f", Utils.roundResut(mBankBuy)));
+        mBankCurrencyView.setText(String.format("%.3f", Utils.roundResut(mBankBuy)));
         mBankSumView.setText("0");
         blackMarketCurrencyView.setText(String.format("%.2f", Utils.roundResut(blackMarketBuy)));
         blackMarketSumView.setText("0");
@@ -94,27 +90,27 @@ public class BuyFragment extends Fragment {
     public void setSumInfo(double count)
     {
         nbuSumView.setText(String.format("%.2f", resultSumNbu(count)));
-        mBankSumView.setText(String.format("%.2f", resultSumMBank(count)));
-        blackMarketSumView.setText(String.format("%.2f", resultSumBlackM(count)));
+        mBankSumView.setText(String.format("%.2f",resultSumMBank(count)));
+        blackMarketSumView.setText(String.format("%.2f",resultSumBlackM(count)));
         refreshAdapter(count);
     }
 
-    public double resultSumNbu(double count)
+    public BigDecimal resultSumNbu(double count)
     {
-        nbuSum = count * nbuCurrency;
-        return Utils.roundResut(nbuSum);
+        BigDecimal x = BigDecimal.valueOf(count * nbuCurrency);
+        return x;
     }
 
-    public double resultSumMBank(double count)
+    public BigDecimal resultSumMBank(double count)
     {
-        mBankSum = count * mBankBuy;
-        return Utils.roundResut(mBankSum);
+        BigDecimal x = BigDecimal.valueOf(count * mBankBuy);
+        return x;
     }
 
-    public double resultSumBlackM(double count)
+    public BigDecimal resultSumBlackM(double count)
     {
-        blackMarketSum = count * blackMarketBuy;
-        return Utils.roundResut(blackMarketSum);
+        BigDecimal x = BigDecimal.valueOf(count * blackMarketBuy);
+        return x;
     }
 
     public void refreshAdapter(double count)

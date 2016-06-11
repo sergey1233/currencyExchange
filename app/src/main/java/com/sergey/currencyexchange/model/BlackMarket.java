@@ -1,12 +1,13 @@
 package com.sergey.currencyexchange.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 
-/**
- * Created by Sergey on 04.05.2016.
- */
-public class BlackMarket implements Parcelable {
+public class BlackMarket {
+
+    private static final int DOLLAR = 0;
+    private static final int EURO = 1;
+    private static final int RB = 2;
+    private static final String URLTYPE = "app_response_blackM.php";
+
     private String date;
     private double buyDollar;
     private double sellDollar;
@@ -20,19 +21,8 @@ public class BlackMarket implements Parcelable {
     private double changesSellEuro = 0;
     private double changesBuyRb = 0;
     private double changesSellRb = 0;
-    private static final int DOLLAR = 0;
-    private static final int EURO = 1;
-    private static final int RB = 2;
 
-    public BlackMarket(String date, double buyDollar, double sellDollar, double buyEuro, double sellEuro, double buyRb, double sellRb) {
-        this.date = date;
-        this.buyDollar = buyDollar;
-        this.sellDollar = sellDollar;
-        this.buyEuro = buyEuro;
-        this.sellEuro = sellEuro;
-        this.buyRb = buyRb;
-        this.sellRb = sellRb;
-    }
+    public BlackMarket() {}
 
     public String getDate() {
         return date;
@@ -90,18 +80,7 @@ public class BlackMarket implements Parcelable {
         return changesSellDollar;
     }
 
-    /* Changes counted from new value to current value */
-    public void countChanges(double buyDollar, double sellDollar, double buyEuro, double sellEuro, double buyRb, double sellRb) {
-        changesBuyDollar = buyDollar - this.buyDollar;
-        changesSellDollar = sellDollar - this.sellDollar;
-        changesBuyEuro = buyEuro - this.buyEuro;
-        changesSellEuro = sellEuro - this.sellEuro;
-        changesBuyRb = buyRb - this.buyRb;
-        changesSellRb = sellRb - this.sellRb;
-    }
-
-    public void setNewInformation(String date, double buyDollar, double sellDollar, double buyEuro, double sellEuro, double buyRb, double sellRb) {
-        countChanges(buyDollar, sellDollar, buyEuro, sellEuro, buyRb, sellRb);
+    public void setNewInformation(String date, double buyDollar, double sellDollar, double buyEuro, double sellEuro, double buyRb, double sellRb, double changesBuyD, double changesSellD, double changesBuyE, double changesSellE, double changesBuyR, double changesSellR) {
         this.date = date;
         this.buyDollar = buyDollar;
         this.sellDollar = sellDollar;
@@ -109,42 +88,15 @@ public class BlackMarket implements Parcelable {
         this.sellEuro = sellEuro;
         this.buyRb = buyRb;
         this.sellRb = sellRb;
+        this.changesBuyDollar = changesBuyD;
+        this.changesSellDollar = changesSellD;
+        this.changesBuyEuro = changesBuyE;
+        this.changesSellEuro = changesSellE;
+        this.changesBuyRb = changesBuyR;
+        this.changesSellRb = changesSellR;
     }
 
-
-    protected BlackMarket(Parcel in) {
-        buyDollar = in.readDouble();
-        sellDollar = in.readDouble();
-        buyEuro = in.readDouble();
-        sellEuro = in.readDouble();
-        buyRb = in.readDouble();
-        sellRb = in.readDouble();
-    }
-
-    public static final Creator<BlackMarket> CREATOR = new Creator<BlackMarket>() {
-        @Override
-        public BlackMarket createFromParcel(Parcel in) {
-            return new BlackMarket(in);
-        }
-
-        @Override
-        public BlackMarket[] newArray(int size) {
-            return new BlackMarket[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeDouble(buyDollar);
-        dest.writeDouble(sellDollar);
-        dest.writeDouble(buyEuro);
-        dest.writeDouble(sellEuro);
-        dest.writeDouble(buyRb);
-        dest.writeDouble(sellRb);
+    public static String getUrlType() {
+        return URLTYPE;
     }
 }

@@ -9,5 +9,7 @@
     <color name="hint">#9b9b9b</color>
     <color name="colorText">#9b9b9b</color>
     <color name="colorButton">#9b9b9b</color>
+    <color name="colorButtonSum">#3aa54c</color>
     <color name="colorTextDark">@color/colorPrimary</color>
+    <color name="spots_dialog_color">@color/colorText</color>
 </resources>

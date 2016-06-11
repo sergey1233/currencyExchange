@@ -3,10 +3,14 @@ package com.sergey.currencyexchange.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by Sergey on 04.05.2016.
- */
+
 public class Bank implements Parcelable {
+
+    private static final int DOLLAR = 0;
+    private static final int EURO = 1;
+    private static final int RB = 2;
+    private static final String URLTYPE = "app_response_banks.php";
+
     private String icon;
     private String name;
     private String date;
@@ -22,46 +26,12 @@ public class Bank implements Parcelable {
     private double changesSellEuro = 0;
     private double changesBuyRb = 0;
     private double changesSellRb = 0;
-    private static final int DOLLAR = 0;
-    private static final int EURO = 1;
-    private static final int RB = 2;
+
 
 
     public Bank(String icon, String name) {
         this.name = name;
         this.icon = icon;
-    }
-
-
-    public Bank(String icon, String name, String date, double buyDollar, double sellDollar, double buEuro, double sellEuro, double buyRb, double sellRb) {
-        this.date = date;
-        this.icon = icon;
-        this.name = name;
-        this.buyDollar = buyDollar;
-        this.sellDollar = sellDollar;
-        this.buyEuro = buEuro;
-        this.sellEuro = sellEuro;
-        this.buyRb = buyRb;
-        this.sellRb = sellRb;
-    }
-
-    public Bank(String icon, String name, String date, double buyDollar, double sellDollar, double buEuro, double sellEuro, double buyRb, double sellRb, double changesBuyDollar, double changesSellDollar, double changesBuyEuro, double changesSellEuro, double changesBuyRb
-    , double changesSellRb) {
-        this.date = date;
-        this.icon = icon;
-        this.name = name;
-        this.buyDollar = buyDollar;
-        this.sellDollar = sellDollar;
-        this.buyEuro = buEuro;
-        this.sellEuro = sellEuro;
-        this.buyRb = buyRb;
-        this.sellRb = sellRb;
-        this.changesBuyDollar = changesBuyDollar;
-        this.changesSellDollar = changesSellDollar;
-        this.changesBuyEuro = changesBuyEuro;
-        this.changesSellEuro = changesSellEuro;
-        this.changesBuyRb = changesBuyRb;
-        this.changesSellRb = changesSellRb;
     }
 
     public String getIcon() {
@@ -128,18 +98,12 @@ public class Bank implements Parcelable {
         return changesSellDollar;
     }
 
-    /* Changes counted from new value to current value */
-    public void countChanges(double buyDollar, double sellDollar, double buyEuro, double sellEuro, double buyRb, double sellRb) {
-        changesBuyDollar = buyDollar - this.buyDollar;
-        changesSellDollar = sellDollar - this.sellDollar;
-        changesBuyEuro = buyEuro - this.buyEuro;
-        changesSellEuro = sellEuro - this.sellEuro;
-        changesBuyRb = buyRb - this.buyRb;
-        changesSellRb = sellRb - this.sellRb;
+
+    public static String getUrlType() {
+        return URLTYPE;
     }
 
-    public void setNewInformation(String date, double buyDollar, double sellDollar, double buyEuro, double sellEuro, double buyRb, double sellRb) {
-        countChanges(buyDollar, sellDollar, buyEuro, sellEuro, buyRb, sellRb);
+    public void setNewInformation(String date, double buyDollar, double sellDollar, double buyEuro, double sellEuro, double buyRb, double sellRb, double changesBuyD, double changesSellD, double changesBuyE, double changesSellE, double changesBuyR, double changesSellR) {
         this.date = date;
         this.buyDollar = buyDollar;
         this.sellDollar = sellDollar;
@@ -147,6 +111,13 @@ public class Bank implements Parcelable {
         this.sellEuro = sellEuro;
         this.buyRb = buyRb;
         this.sellRb = sellRb;
+        this.changesBuyDollar = changesBuyD;
+        this.changesSellDollar = changesSellD;
+        this.changesBuyEuro = changesBuyE;
+        this.changesSellEuro = changesSellE;
+        this.changesBuyRb = changesBuyR;
+        this.changesSellRb = changesSellR;
+
     }
 
 
