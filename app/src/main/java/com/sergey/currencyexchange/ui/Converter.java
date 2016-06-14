@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -84,7 +85,6 @@ public class Converter extends AppCompatActivity implements TextView.OnEditorAct
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.converter);
-
         mainToolBarImage = (ImageButton)findViewById(R.id.icon_main_toolbar);
         converterToolBarImage = (ImageButton)findViewById(R.id.icon_converter_toolbar);
         iconCurrencyToolbar = (ImageButton)findViewById(R.id.icon_currency_toolbar);

@@ -1,5 +1,6 @@
 package com.sergey.currencyexchange.ui.fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 public class BuyFragment extends Fragment {
 
 
+    private static final String TAG = "BuyFragment";
     private TextView nbuCurrencyView;
     private TextView nbuSumView;
     private TextView mBankCurrencyView;
@@ -53,7 +55,6 @@ public class BuyFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View viewFragmentBuy = inflater.inflate(R.layout.fragment, null);
-
         nbuCurrencyView = (TextView)viewFragmentBuy.findViewById(R.id.nbu_currency);
         nbuSumView = (TextView)viewFragmentBuy.findViewById(R.id.nbu_sum);
         mBankCurrencyView = (TextView)viewFragmentBuy.findViewById(R.id.mBank_currency);

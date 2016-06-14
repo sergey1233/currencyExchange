@@ -108,7 +108,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         mainToolBarImage = (ImageButton)findViewById(R.id.icon_main_toolbar);
         converterToolBarImage = (ImageButton)findViewById(R.id.icon_converter_toolbar);
         iconCurrencyToolbar = (ImageButton)findViewById(R.id.icon_currency_toolbar);
@@ -237,6 +236,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
         dbHelper.close();
     }
+
 
     public void setViews() {
         setNbuView(nbu);
