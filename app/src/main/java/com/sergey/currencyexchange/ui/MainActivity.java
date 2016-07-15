@@ -1,5 +1,8 @@
 package com.sergey.currencyexchange.ui;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.content.Intent;
@@ -29,6 +32,8 @@ import com.sergey.currencyexchange.model.DBInterface;
 import com.sergey.currencyexchange.model.MBank;
 import com.sergey.currencyexchange.model.Nbu;
 import com.sergey.currencyexchange.model.Utils;
+import com.sergey.currencyexchange.services.UpdateInfoService;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
@@ -48,10 +53,10 @@ public class MainActivity extends AppCompatActivity {
     private final static String TAG = "MainActivity";
     private static boolean EXIT_FROM_ALL_ACTIVITIES = false;
     private final static int TYPEACTIVITY = 0;
-    private final String TABLE_NAME_NBU = "nbu";
-    private final String TABLE_NAME_MB = "mb";
-    private final String TABLE_NAME_BLACKM = "blackM";
-    private final String TABLE_NAME_BANKS = "banks";
+//    private final String TABLE_NAME_NBU = "nbu";
+//    private final String TABLE_NAME_MB = "mb";
+//    private final String TABLE_NAME_BLACKM = "blackM";
+//    private final String TABLE_NAME_BANKS = "banks";
 
     private ImageButton mainToolBarImage;
     private ImageButton converterToolBarImage;
@@ -91,18 +96,12 @@ public class MainActivity extends AppCompatActivity {
     private BankListAdapter adapter;
     private static int currencyId = 0;//0 - usd; 1 - eur; 2 - rub;
 
-    private static final String URL = "http://currencyexchange.zzz.com.ua/";
-    private Gson gson = new GsonBuilder().create();
-    private Retrofit retrofit = new Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .baseUrl(URL)
-            .build();
-    private DBInterface intf = retrofit.create(DBInterface.class);
-    private DBHelper dbHelper;
-    private static final int DBVERSION = 1;
-    private SQLiteDatabase db;
     private int typeAct;
     private AlertDialog dialog;
+    private BroadcastReceiver broadcastReceiver;
+    private Intent serviceIntent;
+    private IntentFilter intFilt;
+    public final static String BROADCAST_ACTION = "com.sergey.currencyexchange.servicebackbroadcast";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,10 +144,11 @@ public class MainActivity extends AppCompatActivity {
         recyclerViewBanks.setLayoutManager(layoutManager);
         recyclerViewBanks.setItemAnimator(itemAnimator);
         dialog = new SpotsDialog(this, R.style.Custom);
+        serviceIntent = new Intent(this, UpdateInfoService.class);
 
         mainToolBarImage.setColorFilter(Color.argb(255, 255, 255, 255));
         typeAct = getIntent().getIntExtra("fromActivity", 0);
-        dbHelper = new DBHelper(MainActivity.this, DBVERSION);
+
 
         app = ApplicationInfo.getInstance();
         currencyId = app.getCurrencyId();
@@ -176,8 +176,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (typeAct != 1 && typeAct != 2) {
-            db = dbHelper.getWritableDatabase();
-            requestInfo();
+            dialog.show();
+            startService(serviceIntent);
         }
 
         converterToolBarImage.setOnClickListener(new View.OnClickListener() {
@@ -199,10 +199,24 @@ public class MainActivity extends AppCompatActivity {
         loadToolBarImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                db = dbHelper.getWritableDatabase();
-                requestInfo();
+                dialog.show();
+                startService(serviceIntent);
             }
         });
+
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        dialog.dismiss();
+                    }
+                }, 2500);
+                setViews();
+            }
+        };
+        intFilt = new IntentFilter(BROADCAST_ACTION);
     }
 
     private Boolean exit = false;
@@ -232,9 +246,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        dbHelper.close();
+    protected void onStart() {
+        super.onStart();
+        registerReceiver(broadcastReceiver, intFilt);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(broadcastReceiver);
     }
 
 
@@ -242,240 +262,6 @@ public class MainActivity extends AppCompatActivity {
         setNbuView(nbu);
         setMBankView(mBank);
         setBLackMarketView(blackMarket);
-        setBanklistView(bankList);
-    }
-
-    public void requestInfo() {
-        dialog.show();
-        callNbu();
-        callMBank();
-        callBlackM();
-        callBanks();
-    }
-
-    public void callNbu() {
-        Call<Object> callNbu = intf.request(Nbu.getUrlType());
-        callNbu.enqueue(new Callback<Object>() {
-            @Override
-            public void onResponse(Call<Object> call, Response<Object> response) {
-                Map<String, String> map = (Map)response.body();
-                double rateD = Double.parseDouble(map.get("rateD"));
-                double rateE = Double.parseDouble(map.get("rateE"));
-                double rateR = Double.parseDouble(map.get("rateR"));
-                String dateServer = map.get("dateServer");
-                dbHelper.setNbuInfo(db, rateD, rateE, rateR, dateServer.substring(0, 16));
-                getData(nbu);
-            }
-            @Override
-            public void onFailure(Call<Object> call, Throwable t) {
-                getData(nbu);
-            }
-        });
-    }
-
-    public void callMBank() {
-        Call<Object> callMBank = intf.request(MBank.getUrlType());
-        callMBank.enqueue(new Callback<Object>() {
-            @Override
-            public void onResponse(Call<Object> call, Response<Object> response) {
-                ArrayList<Map<String, String>> mapArray = (ArrayList<Map<String, String>>)response.body();
-                for (Map<String, String> map : mapArray) {
-                    int idTime = Integer.parseInt(map.get("idTime"));
-                    double buyD = Double.parseDouble(map.get("buyD"));
-                    double sellD = Double.parseDouble(map.get("sellD"));
-                    double buyE = Double.parseDouble(map.get("buyE"));
-                    double sellE = Double.parseDouble(map.get("sellE"));
-                    double buyR = Double.parseDouble(map.get("buyR"));
-                    double sellR = Double.parseDouble(map.get("sellR"));
-                    String dateServer = map.get("dateServer");
-                    dbHelper.setMBInfo(db, idTime, buyD, sellD, buyE, sellE, buyR, sellR, dateServer.substring(0, 16));
-                }
-                getData(mBank);
-            }
-            @Override
-            public void onFailure(Call<Object> call, Throwable t) {
-                getData(mBank);
-            }
-        });
-    }
-
-    public void callBlackM() {
-        Call<Object> callBlackM = intf.request(BlackMarket.getUrlType());
-        callBlackM.enqueue(new Callback<Object>() {
-            @Override
-            public void onResponse(Call<Object> call, Response<Object> response) {
-
-                Map<String, String> map = (Map)response.body();
-                double buyD = Double.parseDouble(map.get("buyD"));
-                double sellD = Double.parseDouble(map.get("sellD"));
-                double buyE = Double.parseDouble(map.get("buyE"));
-                double sellE = Double.parseDouble(map.get("sellE"));
-                double buyR = Double.parseDouble(map.get("buyR"));
-                double sellR = Double.parseDouble(map.get("sellR"));
-                String dateServer = map.get("dateServer");
-                dbHelper.setBlackMInfo(db, buyD, sellD, buyE, sellE, buyR, sellR, dateServer.substring(0, 16));
-                getData(blackMarket);
-            }
-            @Override
-            public void onFailure(Call<Object> call, Throwable t) {
-                getData(blackMarket);
-            }
-        });
-    }
-
-    public void callBanks() {
-        Call<Object> callBank = intf.request(Bank.getUrlType());
-        callBank.enqueue(new Callback<Object>() {
-            @Override
-            public void onResponse(Call<Object> call, Response<Object> response) {
-                ArrayList<Map<String, String>> mapArray = (ArrayList<Map<String, String>>)response.body();
-                for (Map<String, String> map : mapArray) {
-                    String name = map.get("name");
-                    double buyD = Double.parseDouble(map.get("buyD"));
-                    double sellD = Double.parseDouble(map.get("sellD"));
-                    double buyE = Double.parseDouble(map.get("buyE"));
-                    double sellE = Double.parseDouble(map.get("sellE"));
-                    double buyR = Double.parseDouble(map.get("buyR"));
-                    double sellR = Double.parseDouble(map.get("sellR"));
-                    String dateServer = map.get("dateServer");
-                    dbHelper.setBankInfo(db, name, buyD, sellD, buyE, sellE, buyR, sellR, dateServer.substring(0, 16));
-                }
-                getData(bankList);
-            }
-            @Override
-            public void onFailure(Call<Object> call, Throwable t) {
-                getData(bankList);
-            }
-        });
-    }
-
-    public void getData(Nbu nbu) {
-        Cursor c = db.query(TABLE_NAME_NBU, null, null, null, null, null, null);
-        if (c.moveToFirst()) {
-            int rateDIndex = c.getColumnIndex("rateD");
-            int rateEIndex = c.getColumnIndex("rateE");
-            int rateRIndex = c.getColumnIndex("rateR");
-            int changesDIndex = c.getColumnIndex("changesD");
-            int changesEIndex = c.getColumnIndex("changesE");
-            int changesRIndex = c.getColumnIndex("changesR");
-            int dateServerIndex = c.getColumnIndex("dateServer");
-
-            do {
-                nbu.setNewInformation(c.getString(dateServerIndex), c.getDouble(rateDIndex), c.getDouble(rateEIndex), c.getDouble(rateRIndex), c.getDouble(changesDIndex), c.getDouble(changesEIndex), c.getDouble(changesRIndex));
-            } while (c.moveToNext());
-        }
-        else {
-            c.close();
-        }
-        setNbuView(nbu);
-    }
-
-    public void getData(MBank mBank) {
-        ArrayList<String> dateArray = new ArrayList<>();
-        ArrayList<Double> buyDArray = new ArrayList<>();
-        ArrayList<Double> sellDArray = new ArrayList<>();
-        ArrayList<Double> buyEArray = new ArrayList<>();
-        ArrayList<Double> sellEArray = new ArrayList<>();
-        ArrayList<Double> buyRArray = new ArrayList<>();
-        ArrayList<Double> sellRArray = new ArrayList<>();
-
-        Cursor c = db.query(TABLE_NAME_MB, null, null, null, null, null, null);
-        if (c.moveToFirst()) {
-            int buyDIndex = c.getColumnIndex("buyD");
-            int sellDIndex = c.getColumnIndex("sellD");
-            int buyEIndex = c.getColumnIndex("buyE");
-            int sellEIndex = c.getColumnIndex("sellE");
-            int buyRIndex = c.getColumnIndex("buyR");
-            int sellRIndex = c.getColumnIndex("sellR");
-            int dateServerIndex = c.getColumnIndex("dateServer");
-
-            do {
-                if (c.getDouble(buyDIndex) != 0 && c.getDouble(sellDIndex) != 0) {
-                    buyDArray.add(c.getDouble(buyDIndex));
-                    sellDArray.add(c.getDouble(sellDIndex));
-                    dateArray.add(c.getString(dateServerIndex));
-                }
-                if (c.getDouble(buyEIndex) != 0 && c.getDouble(sellEIndex) != 0) {
-                    buyEArray.add(c.getDouble(buyEIndex));
-                    sellEArray.add(c.getDouble(sellEIndex));
-                }
-                if (c.getDouble(buyRIndex) != 0 && c.getDouble(sellRIndex) != 0) {
-                    buyRArray.add(c.getDouble(buyRIndex));
-                    sellRArray.add(c.getDouble(sellRIndex));
-                }
-            } while (c.moveToNext());
-        }
-        else {
-            c.close();
-        }
-
-        mBank.setNewInformation(Utils.toPrimitiveStringArray(dateArray), Utils.toPrimitiveDoubleArray(buyDArray), Utils.toPrimitiveDoubleArray(sellDArray), Utils.toPrimitiveDoubleArray(buyEArray), Utils.toPrimitiveDoubleArray(sellEArray), Utils.toPrimitiveDoubleArray(buyRArray), Utils.toPrimitiveDoubleArray(sellRArray));
-        setMBankView(mBank);
-    }
-
-    public void getData(BlackMarket blackMarket) {
-        Cursor c = db.query(TABLE_NAME_BLACKM, null, null, null, null, null, null);
-        if (c.moveToFirst()) {
-            int buyDIndex = c.getColumnIndex("buyD");
-            int sellDIndex = c.getColumnIndex("sellD");
-            int buyEIndex = c.getColumnIndex("buyE");
-            int sellEIndex = c.getColumnIndex("sellE");
-            int buyRIndex = c.getColumnIndex("buyR");
-            int sellRIndex = c.getColumnIndex("sellR");
-            int changesBuyDIndex = c.getColumnIndex("changesBuyD");
-            int changesSellDIndex = c.getColumnIndex("changesSellD");
-            int changesBuyEIndex = c.getColumnIndex("changesBuyE");
-            int changesSellEIndex = c.getColumnIndex("changesSellE");
-            int changesBuyRIndex = c.getColumnIndex("changesBuyR");
-            int changesSellRIndex = c.getColumnIndex("changesSellR");
-            int dateServerIndex = c.getColumnIndex("dateServer");
-
-            do {
-                blackMarket.setNewInformation(c.getString(dateServerIndex), c.getDouble(buyDIndex), c.getDouble(sellDIndex), c.getDouble(buyEIndex), c.getDouble(sellEIndex), c.getDouble(buyRIndex), c.getDouble(sellRIndex), c.getDouble(changesBuyDIndex), c.getDouble(changesSellDIndex), c.getDouble(changesBuyEIndex), c.getDouble(changesSellEIndex), c.getDouble(changesBuyRIndex), c.getDouble(changesSellRIndex));
-            } while (c.moveToNext());
-        }
-        else {
-            c.close();
-        }
-        setBLackMarketView(blackMarket);
-    }
-
-    public void getData(ArrayList<Bank> bankList) {
-        Cursor c = db.query(TABLE_NAME_BANKS, null, null, null, null, null, null);
-        if (c.moveToFirst()) {
-            int nameIndex = c.getColumnIndex("name");
-            int buyDIndex = c.getColumnIndex("buyD");
-            int sellDIndex = c.getColumnIndex("sellD");
-            int buyEIndex = c.getColumnIndex("buyE");
-            int sellEIndex = c.getColumnIndex("sellE");
-            int buyRIndex = c.getColumnIndex("buyR");
-            int sellRIndex = c.getColumnIndex("sellR");
-            int changesBuyDIndex = c.getColumnIndex("changesBuyD");
-            int changesSellDIndex = c.getColumnIndex("changesSellD");
-            int changesBuyEIndex = c.getColumnIndex("changesBuyE");
-            int changesSellEIndex = c.getColumnIndex("changesSellE");
-            int changesBuyRIndex = c.getColumnIndex("changesBuyR");
-            int changesSellRIndex = c.getColumnIndex("changesSellR");
-            int dateServerIndex = c.getColumnIndex("dateServer");
-
-            do {
-                for (int i = 0; i < bankList.size(); i++) {
-                    if (bankList.get(i).getName().equals(c.getString(nameIndex))) {
-                        bankList.get(i).setNewInformation(c.getString(dateServerIndex), c.getDouble(buyDIndex), c.getDouble(sellDIndex), c.getDouble(buyEIndex), c.getDouble(sellEIndex), c.getDouble(buyRIndex), c.getDouble(sellRIndex), c.getDouble(changesBuyDIndex), c.getDouble(changesSellDIndex), c.getDouble(changesBuyEIndex), c.getDouble(changesSellEIndex), c.getDouble(changesBuyRIndex), c.getDouble(changesSellRIndex));
-                        break;
-                    }
-                }
-            } while (c.moveToNext());
-        }
-        else {
-            c.close();
-        }
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                dialog.dismiss();
-            }
-        }, 2500);
         setBanklistView(bankList);
     }
 

@@ -36,6 +36,10 @@
             android:noHistory="true">
         </activity>
 
+        <service
+            android:enabled="true"
+            android:name=".services.UpdateInfoService" />
+
     </application>
 
     <uses-permission android:name="android.permission.INTERNET"/>
