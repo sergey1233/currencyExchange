@@ -13,87 +13,10 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
+        <include
             android:layout_width="match_parent"
-            android:layout_height="?android:actionBarSize"
-            android:background="@color/colorPrimaryDark"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-
-            <com.balysv.materialripple.MaterialRippleLayout
-                app:mrl_rippleColor="@color/colorPrimary"
-                app:mrl_rippleOverlay="true"
-                app:mrl_rippleAlpha="0.5"
-                app:mrl_rippleHover="true"
-                app:mrl_rippleDuration="150"
-                app:mrl_rippleFadeDuration="75"
-                app:mrl_rippleDelayClick="true"
-                app:mrl_ripplePersistent="false"
-                android:layout_width="64dp"
-                android:layout_height="56dp"
-                android:paddingBottom="12dp"
-                android:paddingTop="12dp">
-
-                <ImageButton
-                    android:id="@+id/icon_main_toolbar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:background="@null"
-                    app:srcCompat="@drawable/icon_main_dark"/>
-
-            </com.balysv.materialripple.MaterialRippleLayout>
-
-            <com.balysv.materialripple.MaterialRippleLayout
-                app:mrl_rippleColor="@color/colorPrimary"
-                app:mrl_rippleOverlay="true"
-                app:mrl_rippleAlpha="0.5"
-                app:mrl_rippleHover="true"
-                app:mrl_rippleDuration="150"
-                app:mrl_rippleFadeDuration="75"
-                app:mrl_rippleDelayClick="true"
-                app:mrl_ripplePersistent="false"
-                android:layout_width="64dp"
-                android:layout_height="56dp"
-                android:paddingBottom="12dp"
-                android:paddingTop="12dp">
-
-                <ImageButton
-                    android:id="@+id/icon_converter_toolbar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:background="@null"
-                    app:srcCompat="@drawable/icon_converter_dark"/>
-
-            </com.balysv.materialripple.MaterialRippleLayout>
-
-            <com.balysv.materialripple.MaterialRippleLayout
-                app:mrl_rippleColor="@color/colorPrimary"
-                app:mrl_rippleOverlay="true"
-                app:mrl_rippleAlpha="0.5"
-                app:mrl_rippleHover="true"
-                app:mrl_rippleDuration="150"
-                app:mrl_rippleFadeDuration="75"
-                app:mrl_rippleDelayClick="true"
-                app:mrl_ripplePersistent="false"
-                android:layout_width="64dp"
-                android:layout_height="56dp"
-                android:paddingBottom="12dp"
-                android:paddingTop="12dp">
-
-                <ImageButton
-                    android:id="@+id/icon_currency_toolbar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:background="@null"
-                    tools:src="@drawable/icon_dollar_dark"/>
-
-            </com.balysv.materialripple.MaterialRippleLayout>
-
-
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            layout="@layout/action_bar" />
 
         <FrameLayout
             android:id="@+id/fragment_container"
@@ -169,7 +92,7 @@
                                 android:textColorHint="@color/colorTextMain"
                                 android:gravity="right"
                                 android:textSize="24sp"
-                                android:maxLength="8"
+                                android:maxLength="6"
                                 android:text="0"
                                 android:inputType="numberDecimal"
                                 android:imeOptions = "actionDone"/>

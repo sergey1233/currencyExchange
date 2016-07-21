@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -32,7 +31,6 @@ import com.sergey.currencyexchange.model.Utils;
 import com.sergey.currencyexchange.ui.fragment.BuyFragment;
 import com.sergey.currencyexchange.ui.fragment.SellFragment;
 import com.sergey.currencyexchange.ui.widgets.WrapContentHeightViewPager;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -219,9 +217,9 @@ public class Converter extends AppCompatActivity implements TextView.OnEditorAct
         });
     }
 
-    public BigDecimal getResult(double countFrom, double currencyExchange) {
-        BigDecimal x = BigDecimal.valueOf(countFrom * currencyExchange);
-        return x;
+    public double getResult(double countFrom, double currencyExchange) {
+        double result = countFrom * currencyExchange;
+        return result;
     }
 
     //result output to textview, and hide keyboard
@@ -229,7 +227,7 @@ public class Converter extends AppCompatActivity implements TextView.OnEditorAct
         if (countFromEdit.getText() != null)
         {
             if (Utils.isDigit(countFromEdit.getText().toString())) {
-                if (getResult(countFrom, currencyExchange).doubleValue() < 9999999) {
+                if (getResult(countFrom, currencyExchange) < 9999999) {
                     countFrom = Double.parseDouble(countFromEdit.getText().toString());
                     buyFragment.setSumInfo(countFrom);
                     sellFragment.setSumInfo(countFrom);
@@ -248,7 +246,7 @@ public class Converter extends AppCompatActivity implements TextView.OnEditorAct
                     if (Utils.isDigit(currencyExchangeEdit.getText().toString()) == true)
                     {
                         currencyExchange = Double.parseDouble(currencyExchangeEdit.getText().toString());
-                        if (getResult(countFrom, currencyExchange).doubleValue() < 9999999) {
+                        if (getResult(countFrom, currencyExchange) < 9999999) {
                             countToResult.setText(String.format("%.2f", getResult(countFrom, currencyExchange)));
                         }
                         else {

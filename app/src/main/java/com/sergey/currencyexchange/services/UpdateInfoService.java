@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -22,6 +23,8 @@ import com.sergey.currencyexchange.ui.MainActivity;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.GsonConverterFactory;
@@ -32,10 +35,10 @@ import retrofit2.Retrofit;
 public class UpdateInfoService extends Service {
 
     private static final String URL = "http://currencyexchange.zzz.com.ua/";
-    private final String TABLE_NAME_NBU = "nbu";
-    private final String TABLE_NAME_MB = "mb";
-    private final String TABLE_NAME_BLACKM = "blackM";
-    private final String TABLE_NAME_BANKS = "banks";
+    private final String NBU = "nbu";
+    private final String MB = "mb";
+    private final String BLACKM = "blackM";
+    private final String BANKS = "banks";
 
     private Gson gson = new GsonBuilder().create();
     private Retrofit retrofit = new Retrofit.Builder()
@@ -44,7 +47,7 @@ public class UpdateInfoService extends Service {
             .build();
     private DBInterface intf = retrofit.create(DBInterface.class);
     private DBHelper dbHelper;
-    private static final int DBVERSION = 1;
+    private static final int DBVERSION = 12;
     private SQLiteDatabase db;
 
     private ApplicationInfo app;
@@ -53,7 +56,8 @@ public class UpdateInfoService extends Service {
     private BlackMarket blackMarket;
     private ArrayList<Bank> bankList = new ArrayList<>();
 
-    private UpdateRun updateRun;
+    private static CountDownLatch latch;
+
 
     @Nullable
     @Override
@@ -79,13 +83,19 @@ public class UpdateInfoService extends Service {
     }
 
     public int onStartCommand(Intent intent, int flags, int startId) {
-        updateRun = new UpdateRun();
-        updateRun.run();
+        new Thread(new UpdateRun()).start();
+
+        new Thread(new UpdateCall(NBU)).start();
+        new Thread(new UpdateCall(MB)).start();
+        new Thread(new UpdateCall(BLACKM)).start();
+        new Thread(new UpdateCall(BANKS)).start();
 
         return super.onStartCommand(intent, flags, startId);
     }
 
+
     public void callNbu() {
+
         Call<Object> callNbu = intf.request(Nbu.getUrlType());
         callNbu.enqueue(new Callback<Object>() {
             @Override
@@ -182,7 +192,7 @@ public class UpdateInfoService extends Service {
     }
 
     public void getData(Nbu nbu) {
-        Cursor c = db.query(TABLE_NAME_NBU, null, null, null, null, null, null);
+        Cursor c = db.query(NBU, null, null, null, null, null, null);
         if (c.moveToFirst()) {
             int rateDIndex = c.getColumnIndex("rateD");
             int rateEIndex = c.getColumnIndex("rateE");
@@ -199,6 +209,7 @@ public class UpdateInfoService extends Service {
         else {
             c.close();
         }
+        latch.countDown();
     }
 
     public void getData(MBank mBank) {
@@ -210,7 +221,7 @@ public class UpdateInfoService extends Service {
         ArrayList<Double> buyRArray = new ArrayList<>();
         ArrayList<Double> sellRArray = new ArrayList<>();
 
-        Cursor c = db.query(TABLE_NAME_MB, null, null, null, null, null, null);
+        Cursor c = db.query(MB, null, null, null, null, null, null);
         if (c.moveToFirst()) {
             int buyDIndex = c.getColumnIndex("buyD");
             int sellDIndex = c.getColumnIndex("sellD");
@@ -241,10 +252,11 @@ public class UpdateInfoService extends Service {
         }
 
         mBank.setNewInformation(Utils.toPrimitiveStringArray(dateArray), Utils.toPrimitiveDoubleArray(buyDArray), Utils.toPrimitiveDoubleArray(sellDArray), Utils.toPrimitiveDoubleArray(buyEArray), Utils.toPrimitiveDoubleArray(sellEArray), Utils.toPrimitiveDoubleArray(buyRArray), Utils.toPrimitiveDoubleArray(sellRArray));
+        latch.countDown();
     }
 
     public void getData(BlackMarket blackMarket) {
-        Cursor c = db.query(TABLE_NAME_BLACKM, null, null, null, null, null, null);
+        Cursor c = db.query(BLACKM, null, null, null, null, null, null);
         if (c.moveToFirst()) {
             int buyDIndex = c.getColumnIndex("buyD");
             int sellDIndex = c.getColumnIndex("sellD");
@@ -267,10 +279,11 @@ public class UpdateInfoService extends Service {
         else {
             c.close();
         }
+        latch.countDown();
     }
 
     public void getData(ArrayList<Bank> bankList) {
-        Cursor c = db.query(TABLE_NAME_BANKS, null, null, null, null, null, null);
+        Cursor c = db.query(BANKS, null, null, null, null, null, null);
         if (c.moveToFirst()) {
             int nameIndex = c.getColumnIndex("name");
             int buyDIndex = c.getColumnIndex("buyD");
@@ -299,22 +312,52 @@ public class UpdateInfoService extends Service {
         else {
             c.close();
         }
-        updateRun.stop();
-        stopSelf();
+        latch.countDown();
     }
 
-    class UpdateRun implements Runnable {
-
+    class UpdateRun implements Runnable  {
+        @Override
         public void run() {
-            callNbu();
-            callMBank();
-            callBlackM();
-            callBanks();
+            latch = new CountDownLatch(4);
+
+            try {
+                latch.await();
+            }
+            catch (InterruptedException ie) {}
+
+            stop();
         }
 
         void stop() {
             Intent intent = new Intent(MainActivity.BROADCAST_ACTION);
             sendBroadcast(intent);
+            stopSelf();
+        }
+    }
+
+    class UpdateCall implements Runnable {
+        private String name;
+
+        public UpdateCall (String name) {
+
+            this.name = name;
+
+        }
+
+        @Override
+        public void run() {
+            if (name.equals(NBU)) {
+                callNbu();
+            }
+            else if (name.equals(MB)) {
+                callMBank();
+            }
+            else if (name.equals(BLACKM)) {
+                callBlackM();
+            }
+            else if (name.equals((BANKS))) {
+                callBanks();
+            }
         }
     }
 }

@@ -3,65 +3,41 @@ package com.sergey.currencyexchange.ui;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.app.AlertDialog;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.baoyz.widget.PullRefreshLayout;
 import com.sergey.currencyexchange.R;
 import com.sergey.currencyexchange.model.ApplicationInfo;
 import com.sergey.currencyexchange.model.Bank;
 import com.sergey.currencyexchange.model.BlackMarket;
-import com.sergey.currencyexchange.model.DBHelper;
-import com.sergey.currencyexchange.model.DBInterface;
 import com.sergey.currencyexchange.model.MBank;
 import com.sergey.currencyexchange.model.Nbu;
-import com.sergey.currencyexchange.model.Utils;
 import com.sergey.currencyexchange.services.UpdateInfoService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
-
-
-import dmax.dialog.SpotsDialog;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.GsonConverterFactory;
-import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
 
     private final static String TAG = "MainActivity";
     private static boolean EXIT_FROM_ALL_ACTIVITIES = false;
     private final static int TYPEACTIVITY = 0;
-//    private final String TABLE_NAME_NBU = "nbu";
-//    private final String TABLE_NAME_MB = "mb";
-//    private final String TABLE_NAME_BLACKM = "blackM";
-//    private final String TABLE_NAME_BANKS = "banks";
 
     private ImageButton mainToolBarImage;
     private ImageButton converterToolBarImage;
     private ImageButton iconCurrencyToolbar;
-    private ImageButton loadToolBarImage;
     private TextView nbuRate;
     private TextView nbuChangesText;
     private TextView nbuDate;
@@ -97,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     private static int currencyId = 0;//0 - usd; 1 - eur; 2 - rub;
 
     private int typeAct;
-    private AlertDialog dialog;
+    private PullRefreshLayout refreshLayout;
     private BroadcastReceiver broadcastReceiver;
     private Intent serviceIntent;
     private IntentFilter intFilt;
@@ -110,7 +86,6 @@ public class MainActivity extends AppCompatActivity {
         mainToolBarImage = (ImageButton)findViewById(R.id.icon_main_toolbar);
         converterToolBarImage = (ImageButton)findViewById(R.id.icon_converter_toolbar);
         iconCurrencyToolbar = (ImageButton)findViewById(R.id.icon_currency_toolbar);
-        loadToolBarImage = (ImageButton)findViewById(R.id.icon_load_toolbar);
         nbuRate = (TextView)findViewById(R.id.nbu_rate);
         nbuChangesText = (TextView)findViewById(R.id.nbu_changes_text);
         nbuDate = (TextView)findViewById(R.id.nbu_date);
@@ -143,8 +118,8 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
         recyclerViewBanks.setLayoutManager(layoutManager);
         recyclerViewBanks.setItemAnimator(itemAnimator);
-        dialog = new SpotsDialog(this, R.style.Custom);
         serviceIntent = new Intent(this, UpdateInfoService.class);
+        refreshLayout = (PullRefreshLayout) findViewById(R.id.swipeRefreshLayout);
 
         mainToolBarImage.setColorFilter(Color.argb(255, 255, 255, 255));
         typeAct = getIntent().getIntExtra("fromActivity", 0);
@@ -172,11 +147,14 @@ public class MainActivity extends AppCompatActivity {
             Bank VtbB = new Bank("bank_icon_vtb", getString(R.string.vtb));
             Bank OtpB = new Bank("bank_icon_otp", getString(R.string.otp));
             Bank CrediAgriB = new Bank("bank_icon_crediagr", getString(R.string.crediagr));
-            bankList.addAll(Arrays.asList(PrivatB, OshadB, SberB, RaiphB, UkrsotsB, AlphaB, UkrSibB, PumbB, VtbB, OtpB, CrediAgriB));
+            Bank UkrGaz = new Bank("bank_icon_ugb", getString(R.string.ugb));
+            Bank TaskoB = new Bank("bank_icon_taskobank", getString(R.string.taskobank));
+            Bank KreditD = new Bank("bank_icon_kreditdnepr", getString(R.string.kreditdnepr));
+            bankList.addAll(Arrays.asList(PrivatB, OshadB, SberB, RaiphB, UkrsotsB, AlphaB, UkrSibB, PumbB, VtbB, OtpB, CrediAgriB, UkrGaz, TaskoB, KreditD));
         }
 
         if (typeAct != 1 && typeAct != 2) {
-            dialog.show();
+            refreshLayout.setRefreshing(true);
             startService(serviceIntent);
         }
 
@@ -196,27 +174,30 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        loadToolBarImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.show();
-                startService(serviceIntent);
-            }
-        });
 
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                new Timer().schedule(new TimerTask() {
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        dialog.dismiss();
+                        refreshLayout.setRefreshing(false);
                     }
-                }, 2500);
+                }, 1500);
                 setViews();
             }
         };
         intFilt = new IntentFilter(BROADCAST_ACTION);
+
+
+
+        refreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                startService(serviceIntent);
+            }
+        });
     }
 
     private Boolean exit = false;

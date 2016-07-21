@@ -2,6 +2,7 @@
 <resources>
     <color name="white">#ffffff</color>
     <color name="green">#50de69</color>
+    <color name="red">#f83224</color>
     <color name="colorPrimary">#363636</color>
     <color name="colorPrimaryDark">#1c1c1c</color>
     <color name="colorAccent">@color/white</color>
@@ -12,4 +13,11 @@
     <color name="colorButtonSum">#3aa54c</color>
     <color name="colorTextDark">@color/colorPrimary</color>
     <color name="spots_dialog_color">@color/colorText</color>
+
+    <array name="scheme_colors">
+        <item>@color/green</item>
+        <item>@color/red</item>
+        <item>@color/green</item>
+        <item>@color/red</item>
+    </array>
 </resources>

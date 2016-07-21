@@ -5,7 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
+import android.util.Log;
 
 
 public class DBHelper extends SQLiteOpenHelper {
@@ -13,7 +13,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String TAG = "DBHelper";
     private int id = 1;
     private int idTime = 10;
-    private final String[] banksNameArray = {"ПриватБанк", "Ощадбанк", "СБЕРБАНК", "Райффайзен Банк Аваль", "Укрсоцбанк UniCredit Bank TM", "Альфа-Банк", "УкрСиббанк", "ПУМБ", "ВТБ Банк", "ОТП Банк", "Креди Агриколь Банк"};
+    private final String[] banksNameArray = {"ПриватБанк", "Ощадбанк", "СБЕРБАНК", "Райффайзен Банк Аваль", "Укрсоцбанк UniCredit Bank TM", "Альфа-Банк", "УкрСиббанк", "ПУМБ", "ВТБ Банк", "ОТП Банк", "Креди Агриколь Банк", "Укргазбанк", "ТАСкомбанк", "КРЕДИТ ДНЕПР"};
     private String bankName;
     private static final String DB_NAME = "DB.db";
     private final String TABLE_NAME_NBU = "nbu";
@@ -84,6 +84,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(DROP_TABLE_BANKS);
         db.execSQL(CREATE_TABLE_BANKS);
         id = 1;
+
         for (String n : banksNameArray) {
             bankName = n;
             db.execSQL("INSERT INTO " + TABLE_NAME_BANKS + "(`id`, `name`, `buyD`, `sellD`, `buyE`, `sellE`, `buyR`, `sellR`, `changesBuyD`, `changesSellE`, `changesBuyE`, `changesSellR`, `changesBuyR`, `changesSellD`, `dateServer`) VALUES ('" + id + "', '" + bankName + "', '', '', '', '', '', '', '', '', '', '', '', '', '')");

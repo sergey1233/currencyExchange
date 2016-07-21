@@ -31,6 +31,9 @@
     <string name="vtb">ВТБ Банк</string>
     <string name="otp">ОТП Банк</string>
     <string name="crediagr">Креди Агриколь Банк</string>
+    <string name="ugb">Укргазбанк</string>
+    <string name="taskobank">ТАСкомбанк</string>
+    <string name="kreditdnepr">КРЕДИТ ДНЕПР</string>
     <string name="back">Для выхода из приложения нажмите кнопку "назад" еще раз</string>
     <string name="set_own_currency">Ввести произвольный курс</string>
     <string name="hide_own_currency">Спрятать произвольный курс</string>
