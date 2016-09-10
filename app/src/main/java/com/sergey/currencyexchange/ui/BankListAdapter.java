@@ -3,6 +3,7 @@ package com.sergey.currencyexchange.ui;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,9 +42,11 @@ public class BankListAdapter extends RecyclerView.Adapter<BankListAdapter.ViewHo
         Bank bank = bankList.get(i);
 
         try {
-            viewHolder.logoBank.setImageDrawable(getIconBank(bank));
+            viewHolder.logoBank.setImageResource(getIconBank(bank));
         }
-        catch (Exception e) {}
+        catch (Exception e) {
+            Log.d("adapter", e.getMessage());
+        }
 
         if (bank.getName().equals("Укрсоцбанк UniCredit Bank TM")) {
             viewHolder.nameBank.setText(bank.getName().substring(0, 10));
@@ -61,12 +64,11 @@ public class BankListAdapter extends RecyclerView.Adapter<BankListAdapter.ViewHo
         }
     }
 
-    public Drawable getIconBank(Bank bank) {
+    public int getIconBank(Bank bank) {
         String iconName = bank.getIcon();
         int id = context.getResources().getIdentifier(iconName, "drawable", context.getPackageName());
-        Drawable iconBank = context.getResources().getDrawable(id);
 
-        return iconBank;
+        return id;
     }
 
     @Override

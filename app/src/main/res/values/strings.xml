@@ -1,10 +1,6 @@
 <resources>
-    <string name="app_name">CurrencyExchange</string>
+    <string name="app_name" translatable="false">CurrencyExchange</string>
     <string name="app_label">Курс валют</string>
-    <string name="action_settings">Settings</string>
-    <string name="country">Из какой Вы страны?</string>
-    <string name="ukraine">Украина</string>
-    <string name="russia">Россия</string>
     <string name="nbu">НБУ</string>
     <string name="mb">Межбанк</string>
     <string name="blackM">Черный рынок</string>
@@ -17,25 +13,32 @@
     <string name="take_data">Данные взяты с сайтов minfin.com.ua и finance.ua.</string>
     <string name="exception_count">Не корректно введено кол-во валюты для обмена</string>
     <string name="exception_currency">Не корректно введен курс обмена</string>
-    <string name="usd">USD</string>
-    <string name="eur">EUR</string>
-    <string name="rub">RUB</string>
-    <string name="privat">ПриватБанк</string>
-    <string name="oshad">Ощадбанк</string>
-    <string name="sber_bank">СБЕРБАНК</string>
-    <string name="raif">Райффайзен Банк Аваль</string>
-    <string name="ukrsots">Укрсоцбанк UniCredit Bank TM</string>
-    <string name="alpha_bank">Альфа-Банк</string>
-    <string name="ukrsib">УкрСиббанк</string>
-    <string name="pumb">ПУМБ</string>
-    <string name="vtb">ВТБ Банк</string>
-    <string name="otp">ОТП Банк</string>
-    <string name="crediagr">Креди Агриколь Банк</string>
-    <string name="ugb">Укргазбанк</string>
-    <string name="taskobank">ТАСкомбанк</string>
-    <string name="kreditdnepr">КРЕДИТ ДНЕПР</string>
+    <string name="grn" translatable="false">GRN</string>
+    <string name="usd" translatable="false">USD</string>
+    <string name="eur" translatable="false">EUR</string>
+    <string name="rub" translatable="false">RUB</string>
+    <string name="privat" translatable="false">ПриватБанк</string>
+    <string name="oshad" translatable="false">Ощадбанк</string>
+    <string name="sber_bank" translatable="false">СБЕРБАНК</string>
+    <string name="raif" translatable="false">Райффайзен Банк Аваль</string>
+    <string name="ukrsots" translatable="false">Укрсоцбанк UniCredit Bank TM</string>
+    <string name="alpha_bank" translatable="false">Альфа-Банк</string>
+    <string name="ukrsib" translatable="false">УкрСиббанк</string>
+    <string name="pumb" translatable="false">ПУМБ</string>
+    <string name="vtb" translatable="false">ВТБ Банк</string>
+    <string name="otp" translatable="false">ОТП Банк</string>
+    <string name="crediagr" translatable="false">Креди Агриколь Банк</string>
+    <string name="ugb" translatable="false">Укргазбанк</string>
+    <string name="taskobank" translatable="false">ТАСкомбанк</string>
+    <string name="kreditdnepr" translatable="false">КРЕДИТ ДНЕПР</string>
     <string name="back">Для выхода из приложения нажмите кнопку "назад" еще раз</string>
     <string name="set_own_currency">Ввести произвольный курс</string>
     <string name="hide_own_currency">Спрятать произвольный курс</string>
     <string name="too_big">Очень много, введите что то поменьше</string>
+    <string name="fromWhatCurrency">С какой валюты</string>
+    <string name="toWhatCurrency">На какую валюту</string>
+    <string name="ok">Подтвердить</string>
+    <string name="input_count">Введите кол-во</string>
+    <string name="input_own_currency">Введите свой курс</string>
+    <string name="banner_ad_unit_id" translatable="false">ca-app-pub-4587937543235763/1805103135</string>
 </resources>

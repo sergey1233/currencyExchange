@@ -34,6 +34,11 @@ public class Nbu {
         return rateDollar;
     }
 
+    public double[] getRate() {
+        double[] rates = {rateDollar, rateEuro, rateRb};
+        return rates;
+    }
+
     public double getChanges(int currencyId) {
         switch (currencyId)
         {

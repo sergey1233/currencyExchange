@@ -12,19 +12,19 @@ import android.widget.TextView;
 
 import com.sergey.currencyexchange.R;
 import com.sergey.currencyexchange.model.ApplicationInfo;
-import com.sergey.currencyexchange.model.Bank;
-import com.sergey.currencyexchange.model.BlackMarket;
-import com.sergey.currencyexchange.model.MBank;
-import com.sergey.currencyexchange.model.Nbu;
 import com.sergey.currencyexchange.model.Utils;
 import com.sergey.currencyexchange.ui.BankListAdapterConv;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
+
 
 
 public class SellFragment extends Fragment {
 
+    private static final int GRN = 0;
+    private static final int USD = 1;
+    private static final int EUR = 2;
+    private static final int RUB = 3;
     private TextView nbuCurrencyView;
     private TextView nbuSumView;
     private TextView mBankCurrencyView;
@@ -33,12 +33,14 @@ public class SellFragment extends Fragment {
     private TextView blackMarketSumView;
     private RecyclerView recyclerView;
     private BankListAdapterConv adapter;
+    private ApplicationInfo applicationInfo;
 
-    private Bundle bundle;
-    private double nbuCurrency;
-    private double mBankSell;
-    private double blackMarketSell;
-    private ArrayList<Bank> bankListSell;
+    private int fromCurrency = USD;
+    private int toCurrency = GRN;
+
+    private double[] nbuCurrency;
+    private double[] mBankSell;
+    private double[] blackMarketSell;
 
 
     private static final int SELLFRAGMENT = 1;
@@ -59,22 +61,21 @@ public class SellFragment extends Fragment {
         blackMarketSumView = (TextView)viewFragmentSell.findViewById(R.id.blackMarket_sum);
         recyclerView = (RecyclerView)viewFragmentSell.findViewById(R.id.recyclerViewBanks);
 
-        bundle = getArguments();
-        nbuCurrency = bundle.getDouble(Nbu.class.getCanonicalName());
-        mBankSell = bundle.getDouble(MBank.class.getCanonicalName());
-        blackMarketSell = bundle.getDouble(BlackMarket.class.getCanonicalName());
-        bankListSell = bundle.getParcelableArrayList(ArrayList.class.getCanonicalName());
+        applicationInfo = ApplicationInfo.getInstance();
+        nbuCurrency = applicationInfo.getNbu().getRate();
+        mBankSell = applicationInfo.getMBank().getSell();
+        blackMarketSell = applicationInfo.getBlackMarket().getSell();
 
-        nbuCurrencyView.setText(String.format("%.4f", Utils.roundResut(nbuCurrency)));
+        nbuCurrencyView.setText(String.format("%.4f", Utils.roundResut(nbuCurrency[0])) + "  |  " + String.format("%.4f", Utils.roundResut(nbuCurrency[1])) + "  |  " + String.format("%.4f", Utils.roundResut(nbuCurrency[2])));
         nbuSumView.setText("0");
-        mBankCurrencyView.setText(String.format("%.3f", Utils.roundResut(mBankSell)));
+        mBankCurrencyView.setText(String.format("%.3f", Utils.roundResut(mBankSell[0])) + "  |  " + String.format("%.3f", Utils.roundResut(mBankSell[1])) + "  |  " + String.format("%.3f", Utils.roundResut(mBankSell[2])));
         mBankSumView.setText("0");
-        blackMarketCurrencyView.setText(String.format("%.2f", Utils.roundResut(blackMarketSell)));
+        blackMarketCurrencyView.setText(String.format("%.2f", Utils.roundResut(blackMarketSell[0])) + "  |  " + String.format("%.2f", Utils.roundResut(blackMarketSell[1])) + "  |  " + String.format("%.2f", Utils.roundResut(blackMarketSell[2])));
         blackMarketSumView.setText("0");
 
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setFocusable(false);
-        adapter = new BankListAdapterConv(bankListSell, SELLFRAGMENT, ApplicationInfo.getInstance().getCurrencyId(), getContext());
+        adapter = new BankListAdapterConv(SELLFRAGMENT, getContext(), fromCurrency, toCurrency);
         recyclerView.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
@@ -85,35 +86,94 @@ public class SellFragment extends Fragment {
     }
 
 
-    public void setSumInfo(double count)
-    {
-        nbuSumView.setText(String.format("%.2f",resultSumNbu(count)));
-        mBankSumView.setText(String.format("%.2f",resultSumMBank(count)));
-        blackMarketSumView.setText(String.format("%.2f",resultSumBlackM(count)));
+    public void setSumInfo(double count, int fromCurrency, int toCurrency) {
+        this.fromCurrency = fromCurrency;
+        this.toCurrency = toCurrency;
+        nbuSumView.setText(String.format("%.2f", resultSum(count, fromCurrency, toCurrency, nbuCurrency)));
+        mBankSumView.setText(String.format("%.2f",resultSum(count, fromCurrency, toCurrency, mBankSell)));
+        blackMarketSumView.setText(String.format("%.2f",resultSum(count, fromCurrency, toCurrency, blackMarketSell)));
         refreshAdapter(count);
     }
 
-    public BigDecimal resultSumNbu(double count)
-    {
-        BigDecimal x = BigDecimal.valueOf(count * nbuCurrency);
-        return x;
+    public BigDecimal resultSum(double count, int fromCurrency, int toCurrency, double[] currencies) {
+        double rate = countRate(fromCurrency, toCurrency, currencies);
+        BigDecimal result = BigDecimal.valueOf(count * rate);
+        return result;
     }
 
-    public BigDecimal resultSumMBank(double count)
-    {
-        BigDecimal x = BigDecimal.valueOf(count * mBankSell);
-        return x;
-    }
-
-    public BigDecimal resultSumBlackM(double count)
-    {
-        BigDecimal x = BigDecimal.valueOf(count * blackMarketSell);
-        return x;
-    }
-
-    public void refreshAdapter(double count)
-    {
-        adapter.refreshCount(count);
+    public void refreshAdapter(double count) {
+        adapter.refreshInfo(count, fromCurrency, toCurrency);
         adapter.notifyDataSetChanged();
+    }
+
+    public double countRate(int fromCurrency, int toCurrency, double[] currencies) {
+        double finalRate = 0;
+        switch (fromCurrency) {
+            case GRN:
+                switch (toCurrency) {
+                    case GRN:
+                        finalRate = 1;
+                        break;
+                    case USD:
+                        finalRate = 1 / currencies[0];
+                        break;
+                    case EUR:
+                        finalRate = 1 / currencies[1];
+                        break;
+                    case RUB:
+                        finalRate = 1 / currencies[2];
+                        break;
+                }
+                break;
+            case USD:
+                switch (toCurrency) {
+                    case GRN:
+                        finalRate = currencies[0];
+                        break;
+                    case USD:
+                        finalRate = 1;
+                        break;
+                    case EUR:
+                        finalRate = currencies[0] / currencies[1];
+                        break;
+                    case RUB:
+                        finalRate = currencies[0] / currencies[2];
+                        break;
+                }
+                break;
+            case EUR:
+                switch (toCurrency) {
+                    case GRN:
+                        finalRate = currencies[1];
+                        break;
+                    case USD:
+                        finalRate = currencies[1] / currencies[0];
+                        break;
+                    case EUR:
+                        finalRate = 1;
+                        break;
+                    case RUB:
+                        finalRate = currencies[1] / currencies[2];
+                        break;
+                }
+                break;
+            case RUB:
+                switch (toCurrency) {
+                    case GRN:
+                        finalRate = currencies[2];
+                        break;
+                    case USD:
+                        finalRate = currencies[2] / currencies[0];
+                        break;
+                    case EUR:
+                        finalRate = currencies[2] / currencies[1];
+                        break;
+                    case RUB:
+                        finalRate = 1;
+                        break;
+                }
+                break;
+        }
+        return finalRate;
     }
 }

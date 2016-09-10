@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_label">Курс валют</string>
+    <string name="back">Для виходу з програми натисніть кнопку " назад " ще раз</string>
+    <string name="banksUkraine">Банки України</string>
+    <string name="bitcoin">Біткоїн</string>
+    <string name="blackM">Чорний ринок</string>
+    <string name="buy">Покупка</string>
+    <string name="by_exchange">Курс</string>
+    <string name="counted">Перерахувати</string>
+    <string name="exception_count">Не коректно введено кількість валюти для обміну</string>
+    <string name="exception_currency">Не коректно введено курс обміну</string>
+    <string name="hide_own_currency">Сховати довільний курс</string>
+    <string name="mb">Міжбанк</string>
+    <string name="nbu">НБУ</string>
+    <string name="sell">Продаж</string>
+    <string name="set_own_currency">Ввесті довільний курс</string>
+    <string name="take_data">Інформація отрімана з сайтів minfin.com.ua та finance.ua</string>
+    <string name="too_big">Дуже багато, введіть щось менше</string>
+    <string name="fromWhatCurrency">З якої валюти</string>
+    <string name="toWhatCurrency">На яку валюту</string>
+    <string name="ok">Підтвердити</string>
+    <string name="input_count">Введіть кількість</string>
+    <string name="input_own_currency">Введіть свій курс</string>
+</resources>

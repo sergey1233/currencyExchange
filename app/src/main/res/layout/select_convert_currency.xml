@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:fitsSystemWindows="true"
+    tools:context=".ui.SelectConvertCurrency">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextMain"
+            android:textSize="20sp"
+            android:text="@string/fromWhatCurrency"/>
+
+        <Spinner
+            android:id="@+id/select_from_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:background="@drawable/line_white"
+            android:layout_height="33dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextMain"
+            android:textSize="20sp"
+            android:text="@string/toWhatCurrency"/>
+
+        <Spinner
+            android:id="@+id/select_to_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"/>
+
+        <com.balysv.materialripple.MaterialRippleLayout
+            app:mrl_rippleColor="@color/colorPrimaryDark"
+            app:mrl_rippleOverlay="true"
+            app:mrl_rippleAlpha="0.5"
+            app:mrl_rippleDimension="10dp"
+            app:mrl_rippleHover="true"
+            app:mrl_rippleRoundedCorners="10dp"
+            app:mrl_rippleDuration="350"
+            app:mrl_rippleFadeDuration="75"
+            app:mrl_rippleDelayClick="true"
+            app:mrl_ripplePersistent="false"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_gravity="center">
+
+            <Button
+                android:id="@+id/spinner_ok"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:background="@color/colorButtonSum"
+                android:text="@string/ok"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
+                android:textSize="24sp"
+                android:textAlignment="center"/>
+
+        </com.balysv.materialripple.MaterialRippleLayout>
+
+    </LinearLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>

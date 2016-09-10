@@ -36,12 +36,30 @@
             android:noHistory="true">
         </activity>
 
+        <activity
+            android:name=".ui.SelectConvertCurrency"
+            android:label="@string/app_label"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:noHistory="true">
+        </activity>
+
+
         <service
             android:enabled="true"
             android:name=".services.UpdateInfoService" />
 
+        <!--Include the AdActivity configChanges and theme. -->
+        <activity android:name="com.google.android.gms.ads.AdActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+            android:theme="@android:style/Theme.Translucent" />
+
+        <meta-data android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version"/>
+
     </application>
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
 
 </manifest>

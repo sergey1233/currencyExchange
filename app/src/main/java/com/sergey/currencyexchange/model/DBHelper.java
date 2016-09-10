@@ -5,7 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
+
 
 
 public class DBHelper extends SQLiteOpenHelper {
@@ -23,8 +23,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private final String CREATE_TABLE_NBU = "CREATE TABLE " + TABLE_NAME_NBU + "(`id` INTEGER NOT NULL, `rateD` DOUBLE , `rateE` DOUBLE , `rateR` DOUBLE, `changesD` DOUBLE, `changesE` DOUBLE, `changesR` DOUBLE, `dateServer` DATETIME NOT NULL)";
     private final String CREATE_TABLE_MB = "CREATE TABLE " + TABLE_NAME_MB + "(`id` INTEGER NOT NULL, `idTime` INTEGER NOT NULL, `buyD` DOUBLE NOT NULL, `sellD` DOUBLE NOT NULL, `buyE` DOUBLE NOT NULL, `sellE` DOUBLE NOT NULL, `buyR` DOUBLE NOT NULL, `sellR` DOUBLE NOT NULL, `dateServer` DATETIME NOT NULL)";
-    private final String CREATE_TABLE_BLACKM = "CREATE TABLE " + TABLE_NAME_BLACKM + "(`id` INTEGER NOT NULL , `buyD` DOUBLE NOT NULL , `sellD` DOUBLE NOT NULL , `buyE` DOUBLE NOT NULL, `sellE` DOUBLE NOT NULL, `buyR` DOUBLE NOT NULL, `sellR` DOUBLE NOT NULL, `changesBuyD` DOUBLE NOT NULL, `changesSellD`, `changesBuyE` DOUBLE NOT NULL, `changesSellE`, `changesBuyR` DOUBLE NOT NULL, `changesSellR`, `dateServer` DATETIME NOT NULL)";
-    private final String CREATE_TABLE_BANKS = "CREATE TABLE " + TABLE_NAME_BANKS + "(`id` INTEGER NOT NULL , `name` TEXT NOT NULL, `buyD` DOUBLE NOT NULL , `sellD` DOUBLE NOT NULL , `buyE` DOUBLE NOT NULL, `sellE` DOUBLE NOT NULL, `buyR` DOUBLE NOT NULL, `sellR` DOUBLE NOT NULL, `changesBuyD` DOUBLE NOT NULL, `changesSellD`, `changesBuyE` DOUBLE NOT NULL, `changesSellE`, `changesBuyR` DOUBLE NOT NULL, `changesSellR`, `dateServer` DATETIME NOT NULL)";
+    private final String CREATE_TABLE_BLACKM = "CREATE TABLE " + TABLE_NAME_BLACKM + "(`id` INTEGER NOT NULL , `buyD` DOUBLE NOT NULL , `sellD` DOUBLE NOT NULL , `buyE` DOUBLE NOT NULL, `sellE` DOUBLE NOT NULL, `buyR` DOUBLE NOT NULL, `sellR` DOUBLE NOT NULL, `changesBuyD` DOUBLE NOT NULL, `changesSellD`, `changesBuyE` DOUBLE NOT NULL, `changesSellE`, `changesBuyR` DOUBLE NOT NULL, `changesSellR`, `dateServer` DATETIME NOT NULL, `buyDFirstInDay` DOUBLE NOT NULL , `sellDFirstInDay` DOUBLE NOT NULL , `buyEFirstInDay` DOUBLE NOT NULL, `sellEFirstInDay` DOUBLE NOT NULL, `buyRFirstInDay` DOUBLE NOT NULL, `sellRFirstInDay` DOUBLE NOT NULL)";
+    private final String CREATE_TABLE_BANKS = "CREATE TABLE " + TABLE_NAME_BANKS + "(`id` INTEGER NOT NULL , `name` TEXT NOT NULL, `buyD` DOUBLE NOT NULL , `sellD` DOUBLE NOT NULL , `buyE` DOUBLE NOT NULL, `sellE` DOUBLE NOT NULL, `buyR` DOUBLE NOT NULL, `sellR` DOUBLE NOT NULL, `changesBuyD` DOUBLE NOT NULL, `changesSellD`, `changesBuyE` DOUBLE NOT NULL, `changesSellE`, `changesBuyR` DOUBLE NOT NULL, `changesSellR`, `dateServer` DATETIME NOT NULL, `buyDFirstInDay` DOUBLE NOT NULL , `sellDFirstInDay` DOUBLE NOT NULL , `buyEFirstInDay` DOUBLE NOT NULL, `sellEFirstInDay` DOUBLE NOT NULL, `buyRFirstInDay` DOUBLE NOT NULL, `sellRFirstInDay` DOUBLE NOT NULL)";
 
     private final String DROP_TABLE_NBU = "DROP TABLE IF EXISTS " + TABLE_NAME_NBU;
     private final String DROP_TABLE_MB = "DROP TABLE IF EXISTS " + TABLE_NAME_MB;
@@ -48,14 +48,14 @@ public class DBHelper extends SQLiteOpenHelper {
             idTime++;
         }
         db.execSQL(CREATE_TABLE_BLACKM);
-        db.execSQL("INSERT INTO " + TABLE_NAME_BLACKM + "(`id`, `buyD`, `sellD`, `buyE`, `sellE`, `buyR`, `sellR`, `changesBuyD`, `changesSellE`, `changesBuyE`, `changesSellR`, `changesBuyR`, `changesSellD`, `dateServer`) VALUES ('1', '', '', '', '', '', '', '', '', '', '', '', '', '')");
+        db.execSQL("INSERT INTO " + TABLE_NAME_BLACKM + "(`id`, `buyD`, `sellD`, `buyE`, `sellE`, `buyR`, `sellR`, `changesBuyD`, `changesSellE`, `changesBuyE`, `changesSellR`, `changesBuyR`, `changesSellD`, `dateServer`, `buyDFirstInDay`, `sellDFirstInDay`, `buyEFirstInDay`, `sellEFirstInDay`, `buyRFirstInDay`, `sellRFirstInDay`) VALUES ('1', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '')");
 
 
         db.execSQL(CREATE_TABLE_BANKS);
         id = 1;
         for (String n : banksNameArray) {
             bankName = n;
-            db.execSQL("INSERT INTO " + TABLE_NAME_BANKS + "(`id`, `name`, `buyD`, `sellD`, `buyE`, `sellE`, `buyR`, `sellR`, `changesBuyD`, `changesSellE`, `changesBuyE`, `changesSellR`, `changesBuyR`, `changesSellD`, `dateServer`) VALUES ('" + id + "', '" + bankName + "', '', '', '', '', '', '', '', '', '', '', '', '', '')");
+            db.execSQL("INSERT INTO " + TABLE_NAME_BANKS + "(`id`, `name`, `buyD`, `sellD`, `buyE`, `sellE`, `buyR`, `sellR`, `changesBuyD`, `changesSellE`, `changesBuyE`, `changesSellR`, `changesBuyR`, `changesSellD`, `dateServer`, `buyDFirstInDay`, `sellDFirstInDay`, `buyEFirstInDay`, `sellEFirstInDay`, `buyRFirstInDay`, `sellRFirstInDay`) VALUES ('" + id + "', '" + bankName + "', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '')");
             id++;
         }
     }
@@ -79,7 +79,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         db.execSQL(DROP_TABLE_BLACKM);
         db.execSQL(CREATE_TABLE_BLACKM);
-        db.execSQL("INSERT INTO " + TABLE_NAME_BLACKM + "(`id`, `buyD`, `sellD`, `buyE`, `sellE`, `buyR`, `sellR`, `changesBuyD`, `changesSellE`, `changesBuyE`, `changesSellR`, `changesBuyR`, `changesSellD`, `dateServer`) VALUES ('1', '', '', '', '', '', '', '', '', '', '', '', '', '')");
+        db.execSQL("INSERT INTO " + TABLE_NAME_BLACKM + "(`id`, `buyD`, `sellD`, `buyE`, `sellE`, `buyR`, `sellR`, `changesBuyD`, `changesSellE`, `changesBuyE`, `changesSellR`, `changesBuyR`, `changesSellD`, `dateServer`, `buyDFirstInDay`, `sellDFirstInDay`, `buyEFirstInDay`, `sellEFirstInDay`, `buyRFirstInDay`, `sellRFirstInDay`) VALUES ('1', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '')");
 
         db.execSQL(DROP_TABLE_BANKS);
         db.execSQL(CREATE_TABLE_BANKS);
@@ -87,7 +87,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         for (String n : banksNameArray) {
             bankName = n;
-            db.execSQL("INSERT INTO " + TABLE_NAME_BANKS + "(`id`, `name`, `buyD`, `sellD`, `buyE`, `sellE`, `buyR`, `sellR`, `changesBuyD`, `changesSellE`, `changesBuyE`, `changesSellR`, `changesBuyR`, `changesSellD`, `dateServer`) VALUES ('" + id + "', '" + bankName + "', '', '', '', '', '', '', '', '', '', '', '', '', '')");
+            db.execSQL("INSERT INTO " + TABLE_NAME_BANKS + "(`id`, `name`, `buyD`, `sellD`, `buyE`, `sellE`, `buyR`, `sellR`, `changesBuyD`, `changesSellE`, `changesBuyE`, `changesSellR`, `changesBuyR`, `changesSellD`, `dateServer`, `buyDFirstInDay`, `sellDFirstInDay`, `buyEFirstInDay`, `sellEFirstInDay`, `buyRFirstInDay`, `sellRFirstInDay`) VALUES ('" + id + "', '" + bankName + "', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '')");
             id++;
         }
     }
@@ -149,8 +149,14 @@ public class DBHelper extends SQLiteOpenHelper {
             int buyRIndex = c.getColumnIndex("buyR");
             int sellRIndex = c.getColumnIndex("sellR");
             int dateServerIndex = c.getColumnIndex("dateServer");
+            int buyDFirstIndex = c.getColumnIndex("buyDFirstInDay");
+            int sellDFirstIndex = c.getColumnIndex("sellDFirstInDay");
+            int buyEFirstIndex = c.getColumnIndex("buyEFirstInDay");
+            int sellEFirstIndex = c.getColumnIndex("sellEFirstInDay");
+            int buyRFirstIndex = c.getColumnIndex("buyRFirstInDay");
+            int sellRFirstIndex = c.getColumnIndex("sellRFirstInDay");
 
-            //if days the same than not need to count changes of nbu rates
+            //if days the same than count changes fo first data of the day
             do {
                 if (!c.getString(dateServerIndex).isEmpty()) {
                     if (!dateServer.substring(0, 10).equals(c.getString(dateServerIndex).substring(0, 10))) {
@@ -162,6 +168,33 @@ public class DBHelper extends SQLiteOpenHelper {
                         changesSellR = sellR - c.getDouble(sellRIndex);
                         changes = true;
                     }
+                    else {
+                        double buyDFirst = c.getDouble(buyDFirstIndex);
+                        double sellDFirst = c.getDouble(sellDFirstIndex);
+                        double buyEFirst = c.getDouble(buyEFirstIndex);
+                        double sellEFirst = c.getDouble(sellEFirstIndex);
+                        double buyRFirst = c.getDouble(buyRFirstIndex);
+                        double sellRFirst = c.getDouble(sellRFirstIndex);
+
+                        if (buyDFirst != 0) {
+                            changesBuyD = buyD - buyDFirst;
+                        }
+                        if (sellDFirst != 0) {
+                            changesSellD = sellD - sellDFirst;
+                        }
+                        if (buyEFirst != 0) {
+                            changesBuyE = buyE - buyEFirst;
+                        }
+                        if (sellEFirst != 0) {
+                            changesSellE = sellE - sellEFirst;
+                        }
+                        if (buyRFirst != 0) {
+                            changesBuyR = buyR - buyRFirst;
+                        }
+                        if (sellRFirst != 0) {
+                            changesSellR = sellR - sellRFirst;
+                        }
+                    }
                 }
             } while (c.moveToNext());
         }
@@ -170,10 +203,45 @@ public class DBHelper extends SQLiteOpenHelper {
         }
 
         if (changes) {
-            db.execSQL("UPDATE " + TABLE_NAME_BLACKM + " SET buyD = '" + buyD + "', sellD = '" + sellD + "', buyE = '" + buyE + "', sellE = '" + sellE + "', buyR = '" + buyR + "', sellR = '" + sellR + "', changesBuyD = '" + changesBuyD + "', changesSellD = '" + changesSellD + "', changesBuyE = '" + changesBuyE + "', changesSellE = '" + changesSellE + "', changesBuyR = '" + changesBuyR + "', changesSellR = '" + changesSellR + "', dateServer = '" + dateServer + "' WHERE id = 1");
+            db.execSQL(
+                    "UPDATE " + TABLE_NAME_BLACKM + " SET " +
+                            "buyD = '" + buyD +
+                            "', sellD = '" + sellD +
+                            "', buyE = '" + buyE +
+                            "', sellE = '" + sellE +
+                            "', buyR = '" + buyR +
+                            "', sellR = '" + sellR +
+                            "', changesBuyD = '" + changesBuyD +
+                            "', changesSellD = '" + changesSellD +
+                            "', changesBuyE = '" + changesBuyE +
+                            "', changesSellE = '" + changesSellE +
+                            "', changesBuyR = '" + changesBuyR +
+                            "', changesSellR = '" + changesSellR +
+                            "', dateServer = '" + dateServer +
+                            "', buyDFirstInDay = '" + buyD +
+                            "', sellDFirstInDay = '" + sellD +
+                            "', buyEFirstInDay = '" + buyE +
+                            "', sellEFirstInDay = '" + sellE +
+                            "', buyRFirstInDay = '" + buyR +
+                            "', sellRFirstInDay = '" + sellR +
+                            "' WHERE id = 1");
         }
         else {
-            db.execSQL("UPDATE " + TABLE_NAME_BLACKM + " SET buyD = '" + buyD + "', sellD = '" + sellD + "', buyE = '" + buyE + "', sellE = '" + sellE + "', buyR = '" + buyR + "', sellR = '" + sellR + "', dateServer = '" + dateServer + "' WHERE id = 1");
+            db.execSQL("UPDATE " + TABLE_NAME_BLACKM + " SET " +
+                    "buyD = '" + buyD +
+                    "', sellD = '" + sellD +
+                    "', buyE = '" + buyE +
+                    "', sellE = '" + sellE +
+                    "', buyR = '" + buyR +
+                    "', sellR = '" + sellR +
+                    "', changesBuyD = '" + changesBuyD +
+                    "', changesSellD = '" + changesSellD +
+                    "', changesBuyE = '" + changesBuyE +
+                    "', changesSellE = '" + changesSellE +
+                    "', changesBuyR = '" + changesBuyR +
+                    "', changesSellR = '" + changesSellR +
+                    "', dateServer = '" + dateServer +
+                    "' WHERE id = 1");
         }
     }
 
@@ -195,8 +263,14 @@ public class DBHelper extends SQLiteOpenHelper {
             int buyRIndex = c.getColumnIndex("buyR");
             int sellRIndex = c.getColumnIndex("sellR");
             int dateServerIndex = c.getColumnIndex("dateServer");
+            int buyDFirstIndex = c.getColumnIndex("buyDFirstInDay");
+            int sellDFirstIndex = c.getColumnIndex("sellDFirstInDay");
+            int buyEFirstIndex = c.getColumnIndex("buyEFirstInDay");
+            int sellEFirstIndex = c.getColumnIndex("sellEFirstInDay");
+            int buyRFirstIndex = c.getColumnIndex("buyRFirstInDay");
+            int sellRFirstIndex = c.getColumnIndex("sellRFirstInDay");
 
-            //if days the same than not need to count changes of nbu rates
+            //if days the same than count changes fo first data of the day
             do {
                 if (!c.getString(dateServerIndex).isEmpty()) {
                     if (!dateServer.substring(0, 10).equals(c.getString(dateServerIndex).substring(0, 10))) {
@@ -208,6 +282,33 @@ public class DBHelper extends SQLiteOpenHelper {
                         changesSellR = sellR - c.getDouble(sellRIndex);
                         changes = true;
                     }
+                    else {
+                        double buyDFirst = c.getDouble(buyDFirstIndex);
+                        double sellDFirst = c.getDouble(sellDFirstIndex);
+                        double buyEFirst = c.getDouble(buyEFirstIndex);
+                        double sellEFirst = c.getDouble(sellEFirstIndex);
+                        double buyRFirst = c.getDouble(buyRFirstIndex);
+                        double sellRFirst = c.getDouble(sellRFirstIndex);
+
+                        if (buyDFirst != 0) {
+                            changesBuyD = buyD - buyDFirst;
+                        }
+                        if (sellDFirst != 0) {
+                            changesSellD = sellD - sellDFirst;
+                        }
+                        if (buyEFirst != 0) {
+                            changesBuyE = buyE - buyEFirst;
+                        }
+                        if (sellEFirst != 0) {
+                            changesSellE = sellE - sellEFirst;
+                        }
+                        if (buyRFirst != 0) {
+                            changesBuyR = buyR - buyRFirst;
+                        }
+                        if (sellRFirst != 0) {
+                            changesSellR = sellR - sellRFirst;
+                        }
+                    }
                 }
             } while (c.moveToNext());
         }
@@ -215,10 +316,44 @@ public class DBHelper extends SQLiteOpenHelper {
             c.close();
         }
         if (changes) {
-            db.execSQL("UPDATE " + TABLE_NAME_BANKS + " SET buyD = '" + buyD + "', sellD = '" + sellD + "', buyE = '" + buyE + "', sellE = '" + sellE + "', buyR = '" + buyR + "', sellR = '" + sellR + "', changesBuyD = '" + changesBuyD + "', changesSellD = '" + changesSellD + "', changesBuyE = '" + changesBuyE + "', changesSellE = '" + changesSellE + "', changesBuyR = '" + changesBuyR + "', changesSellR = '" + changesSellR + "', dateServer = '" + dateServer + "' WHERE name = '" + name + "'");
+            db.execSQL("UPDATE " + TABLE_NAME_BANKS + " SET " +
+                    "buyD = '" + buyD +
+                    "', sellD = '" + sellD +
+                    "', buyE = '" + buyE +
+                    "', sellE = '" + sellE +
+                    "', buyR = '" + buyR +
+                    "', sellR = '" + sellR +
+                    "', changesBuyD = '" + changesBuyD +
+                    "', changesSellD = '" + changesSellD +
+                    "', changesBuyE = '" + changesBuyE +
+                    "', changesSellE = '" + changesSellE +
+                    "', changesBuyR = '" + changesBuyR +
+                    "', changesSellR = '" + changesSellR +
+                    "', buyDFirstInDay = '" + buyD +
+                    "', sellDFirstInDay = '" + sellD +
+                    "', buyEFirstInDay = '" + buyE +
+                    "', sellEFirstInDay = '" + sellE +
+                    "', buyRFirstInDay = '" + buyR +
+                    "', sellRFirstInDay = '" + sellR +
+                    "', dateServer = '" + dateServer +
+                    "' WHERE name = '" + name + "'");
         }
         else {
-            db.execSQL("UPDATE " + TABLE_NAME_BANKS + " SET buyD = '" + buyD + "', sellD = '" + sellD + "', buyE = '" + buyE + "', sellE = '" + sellE + "', buyR = '" + buyR + "', sellR = '" + sellR + "', dateServer = '" + dateServer + "' WHERE name = '" + name + "'");
+            db.execSQL("UPDATE " + TABLE_NAME_BANKS + " SET " +
+                    "buyD = '" + buyD +
+                    "', sellD = '" + sellD +
+                    "', buyE = '" + buyE +
+                    "', sellE = '" + sellE +
+                    "', buyR = '" + buyR +
+                    "', sellR = '" + sellR +
+                    "', changesBuyD = '" + changesBuyD +
+                    "', changesSellD = '" + changesSellD +
+                    "', changesBuyE = '" + changesBuyE +
+                    "', changesSellE = '" + changesSellE +
+                    "', changesBuyR = '" + changesBuyR +
+                    "', changesSellR = '" + changesSellR +
+                    "', dateServer = '" + dateServer +
+                    "' WHERE name = '" + name + "'");
         }
 
     }

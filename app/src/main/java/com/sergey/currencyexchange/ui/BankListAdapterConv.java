@@ -11,27 +11,35 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sergey.currencyexchange.R;
+import com.sergey.currencyexchange.model.ApplicationInfo;
 import com.sergey.currencyexchange.model.Bank;
 import com.sergey.currencyexchange.model.Utils;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.ArrayList;
 
 public class BankListAdapterConv extends RecyclerView.Adapter<BankListAdapterConv.ViewHolder> {
+    private static final int GRN = 0;
+    private static final int USD = 1;
+    private static final int EUR = 2;
+    private static final int RUB = 3;
     private int typefragment; //0 - buy; 1 - sell;
-    private List<Bank> bankList;
+    private ArrayList<Bank> bankList;
     private double count;
     private Context context;
-    private int currencyId;
+    private ApplicationInfo applicationInfo;
+    private int fromCurrency;
+    private int toCurrency;
     private static final String TAG = "BankListAdapter";
 
-    public BankListAdapterConv(List<Bank> bankList, int typefragment, int currencyId, Context context)
-    {
-        this.bankList = bankList;
+    public BankListAdapterConv(int typefragment, Context context, int fromCurrency, int toCurrency) {
+        applicationInfo = ApplicationInfo.getInstance();
+        this.bankList = applicationInfo.getBankList();
         this.typefragment = typefragment;
         this.context = context;
-        this.currencyId = currencyId;
         this.count = 0;
+        this.fromCurrency = fromCurrency;
+        this.toCurrency = toCurrency;
     }
 
     @Override
@@ -41,13 +49,14 @@ public class BankListAdapterConv extends RecyclerView.Adapter<BankListAdapterCon
         return new ViewHolder(v);
     }
 
-
     @Override
     public void onBindViewHolder(BankListAdapterConv.ViewHolder viewHolder, int i) {
         Bank bank = bankList.get(i);
+        double[] buyCurrency = bank.getBuy();
+        double[] sellCurrency = bank.getSell();
 
         try {
-            viewHolder.logoBank.setImageDrawable(getIconBank(bank));
+            viewHolder.logoBank.setImageResource(getIconBank(bank));
         }
         catch (Exception e) {}
 
@@ -60,29 +69,98 @@ public class BankListAdapterConv extends RecyclerView.Adapter<BankListAdapterCon
         viewHolder.line_recycle.setVisibility(View.VISIBLE);
         if (typefragment == 0)
         {
-            viewHolder.bankCurrency.setText(String.format("%.2f", Utils.roundResut(bank.getBuy(currencyId))));
-            viewHolder.bankSum.setText(String.format("%.2f", resultSum(count, bank.getBuy(currencyId))));
+            viewHolder.bankCurrency.setText(String.format("%.2f", Utils.roundResut(buyCurrency[0])) + "  |  " + String.format("%.2f", Utils.roundResut(buyCurrency[1])) + "  |  " + String.format("%.2f", Utils.roundResut(buyCurrency[2])));
+            viewHolder.bankSum.setText(String.format("%.2f", resultSum(count, fromCurrency, toCurrency, bank.getBuy())));
         }
         else
         {
-            viewHolder.bankCurrency.setText(String.format("%.2f", Utils.roundResut(bank.getSell(currencyId))));
-            viewHolder.bankSum.setText(String.format("%.2f", resultSum(count, bank.getSell(currencyId))));
+            viewHolder.bankCurrency.setText(String.format("%.2f", Utils.roundResut(sellCurrency[0])) + "  |  " + String.format("%.2f", Utils.roundResut(sellCurrency[1])) + "  |  " + String.format("%.2f", Utils.roundResut(sellCurrency[2])));
+            viewHolder.bankSum.setText(String.format("%.2f", resultSum(count, fromCurrency, toCurrency, bank.getSell())));
         }
     }
 
-    public BigDecimal resultSum(double count, double currency)
-    {
-        BigDecimal x = BigDecimal.valueOf(count * currency);
-        return x;
+    public BigDecimal resultSum(double count, int fromCurrency, int toCurrency, double[] currencies) {
+        double rate = countRate(fromCurrency, toCurrency, currencies);
+        BigDecimal result = BigDecimal.valueOf(count * rate);
+        return result;
     }
 
-    public Drawable getIconBank(Bank bank)
-    {
+    public double countRate(int fromCurrency, int toCurrency, double[] currencies) {
+        double finalRate = 0;
+        switch (fromCurrency) {
+            case GRN:
+                switch (toCurrency) {
+                    case GRN:
+                        finalRate = 1;
+                        break;
+                    case USD:
+                        finalRate = 1 / currencies[0];
+                        break;
+                    case EUR:
+                        finalRate = 1 / currencies[1];
+                        break;
+                    case RUB:
+                        finalRate = 1 / currencies[2];
+                        break;
+                }
+                break;
+            case USD:
+                switch (toCurrency) {
+                    case GRN:
+                        finalRate = currencies[0];
+                        break;
+                    case USD:
+                        finalRate = 1;
+                        break;
+                    case EUR:
+                        finalRate = currencies[0] / currencies[1];
+                        break;
+                    case RUB:
+                        finalRate = currencies[0] / currencies[2];
+                        break;
+                }
+                break;
+            case EUR:
+                switch (toCurrency) {
+                    case GRN:
+                        finalRate = currencies[1];
+                        break;
+                    case USD:
+                        finalRate = currencies[1] / currencies[0];
+                        break;
+                    case EUR:
+                        finalRate = 1;
+                        break;
+                    case RUB:
+                        finalRate = currencies[1] / currencies[2];
+                        break;
+                }
+                break;
+            case RUB:
+                switch (toCurrency) {
+                    case GRN:
+                        finalRate = currencies[2];
+                        break;
+                    case USD:
+                        finalRate = currencies[2] / currencies[0];
+                        break;
+                    case EUR:
+                        finalRate = currencies[2] / currencies[1];
+                        break;
+                    case RUB:
+                        finalRate = 1;
+                        break;
+                }
+                break;
+        }
+        return finalRate;
+    }
+
+    public int getIconBank(Bank bank) {
         String iconName = bank.getIcon();
         int id = context.getResources().getIdentifier(iconName, "drawable", context.getPackageName());
-        Drawable iconBank = context.getResources().getDrawable(id);
 
-        return iconBank;
+        return id;
     }
 
     @Override
@@ -95,9 +173,10 @@ public class BankListAdapterConv extends RecyclerView.Adapter<BankListAdapterCon
         return position % 2 * 2;
     }
 
-    public void refreshCount(double count)
-    {
+    public void refreshInfo(double count, int fromCurrency, int toCurrency) {
         this.count = count;
+        this.fromCurrency = fromCurrency;
+        this.toCurrency = toCurrency;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

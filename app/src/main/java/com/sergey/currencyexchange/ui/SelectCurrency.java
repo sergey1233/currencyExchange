@@ -2,11 +2,8 @@ package com.sergey.currencyexchange.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Toast;
-
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.sergey.currencyexchange.R;
 import com.sergey.currencyexchange.model.ApplicationInfo;
@@ -15,7 +12,11 @@ import com.sergey.currencyexchange.model.ApplicationInfo;
 public class SelectCurrency extends AppCompatActivity {
 
     private static final String TAG = "SelectCurrency:";
-    private final static int TYPEACTIVITY = 2;
+    private static final int MAINACTIVITYTYPE = 0;
+    private static final int CONVERTERTYPE = 1;
+    private static final int SELECTCURRENCYTYPE = 2;
+    private static final int SELECTCONVERTCURRENCYTYPE = 3;
+    private final static int TYPEACTIVITY = SELECTCURRENCYTYPE;
     private MaterialRippleLayout rippleLayoutUsd;
     private MaterialRippleLayout rippleLayoutEur;
     private MaterialRippleLayout rippleLayoutRub;
@@ -36,14 +37,7 @@ public class SelectCurrency extends AppCompatActivity {
         rippleLayoutRub = (MaterialRippleLayout)findViewById(R.id.ripple_view_rub);
 
         int typeAct = getIntent().getIntExtra("fromActivity", 0);
-        switch(typeAct) {
-            case 0:
-                intent = new Intent(SelectCurrency.this, MainActivity.class);
-                break;
-            case 1:
-                intent = new Intent(SelectCurrency.this, Converter.class);
-                break;
-        }
+        intent = new Intent(SelectCurrency.this, MainActivity.class);
         intent.putExtra("fromActivity", TYPEACTIVITY);
 
         rippleLayoutUsd.setOnClickListener(new View.OnClickListener() {

@@ -18,6 +18,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baoyz.widget.PullRefreshLayout;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.sergey.currencyexchange.R;
 import com.sergey.currencyexchange.model.ApplicationInfo;
 import com.sergey.currencyexchange.model.Bank;
@@ -31,9 +34,15 @@ import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final static String TAG = "MainActivity";
+    private AdView mAdView;
+
+    private final static String TAG = "MainActivity = ";
     private static boolean EXIT_FROM_ALL_ACTIVITIES = false;
-    private final static int TYPEACTIVITY = 0;
+    private static final int MAINACTIVITYTYPE = 0;
+    private static final int CONVERTERTYPE = 1;
+    private static final int SELECTCURRENCYTYPE = 2;
+    private static final int SELECTCONVERTCURRENCYTYPE = 3;
+    private final static int TYPEACTIVITY = MAINACTIVITYTYPE;
 
     private ImageButton mainToolBarImage;
     private ImageButton converterToolBarImage;
@@ -83,6 +92,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+//        MobileAds.initialize(this, mobAdsSdk);
+        mAdView = (AdView)findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
+
         mainToolBarImage = (ImageButton)findViewById(R.id.icon_main_toolbar);
         converterToolBarImage = (ImageButton)findViewById(R.id.icon_converter_toolbar);
         iconCurrencyToolbar = (ImageButton)findViewById(R.id.icon_currency_toolbar);
@@ -219,23 +235,58 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onPause() {
+        if (mAdView != null) {
+            mAdView.pause();
+        }
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mAdView != null) {
+            mAdView.resume();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        if (mAdView != null) {
+            mAdView.destroy();
+        }
+        super.onDestroy();
+    }
+
+
+    @Override
     protected void onRestart() {
         super.onRestart();
         if (EXIT_FROM_ALL_ACTIVITIES) {
             finish();
         }
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        registerReceiver(broadcastReceiver, intFilt);
+        try {
+            registerReceiver(broadcastReceiver, intFilt);
+        }
+        catch (IllegalArgumentException ilae){
+        }
     }
 
+
     @Override
-    protected void onPause() {
-        super.onPause();
-        unregisterReceiver(broadcastReceiver);
+    protected void onStop() {
+        super.onStop();
+        try {
+            unregisterReceiver(broadcastReceiver);
+        }
+        catch (IllegalArgumentException ilae){
+        }
     }
 
 

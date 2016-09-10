@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -34,6 +33,7 @@ import retrofit2.Retrofit;
 
 public class UpdateInfoService extends Service {
 
+    private static final String TAG = "UpdateInfoService";
     private static final String URL = "http://currencyexchange.zzz.com.ua/";
     private final String NBU = "nbu";
     private final String MB = "mb";
@@ -47,7 +47,7 @@ public class UpdateInfoService extends Service {
             .build();
     private DBInterface intf = retrofit.create(DBInterface.class);
     private DBHelper dbHelper;
-    private static final int DBVERSION = 12;
+    private static final int DBVERSION = 13;
     private SQLiteDatabase db;
 
     private ApplicationInfo app;
@@ -80,6 +80,7 @@ public class UpdateInfoService extends Service {
     public void onDestroy() {
         super.onDestroy();
         dbHelper.close();
+
     }
 
     public int onStartCommand(Intent intent, int flags, int startId) {

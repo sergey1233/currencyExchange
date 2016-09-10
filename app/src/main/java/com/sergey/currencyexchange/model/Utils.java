@@ -4,8 +4,7 @@ import java.util.ArrayList;
 
 public class Utils {
 
-    public static double roundResut(double number)
-    {
+    public static double roundResut(double number) {
         double result = number * 10000;
         int i = (int)Math.round(result);
         result = (double)i/10000;

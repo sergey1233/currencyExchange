@@ -3,6 +3,9 @@ package com.sergey.currencyexchange.model;
 
 public class MBank {
 
+    private static final int DOLLAR = 0;
+    private static final int EURO = 1;
+    private static final int RB = 2;
     private static final String URLTYPE = "app_response_mb.php";
     private static final int[] idTimeArray = {10, 11, 12, 13, 14, 15, 16, 17};
     private String[] dateArray;
@@ -25,9 +28,6 @@ public class MBank {
     private double changesSellEuro = 0;
     private double changesBuyRb = 0;
     private double changesSellRb = 0;
-    private static final int DOLLAR = 0;
-    private static final int EURO = 1;
-    private static final int RB = 2;
 
     public MBank() {
         this.dateArray = new String[0];
@@ -57,6 +57,11 @@ public class MBank {
         return buyDollar;
     }
 
+    public double[] getBuy() {
+        double[] buys = {buyDollar, buyEuro, buyRb};
+        return buys;
+    }
+
 
     public double getSell(int currencyId) {
         switch (currencyId)
@@ -69,6 +74,11 @@ public class MBank {
                 return sellRb;
         }
         return sellDollar;
+    }
+
+    public double[] getSell() {
+        double[] sells = {sellDollar, sellEuro, sellRb};
+        return sells;
     }
 
 

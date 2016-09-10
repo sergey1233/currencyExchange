@@ -59,6 +59,11 @@ public class Bank implements Parcelable {
         return buyDollar;
     }
 
+    public double[] getBuy() {
+        double[] buys = {buyDollar, buyEuro, buyRb};
+        return buys;
+    }
+
     public double getSell(int currencyId) {
         switch (currencyId)
         {
@@ -70,6 +75,11 @@ public class Bank implements Parcelable {
                 return sellRb;
         }
         return sellDollar;
+    }
+
+    public double[] getSell() {
+        double[] sells = {sellDollar, sellEuro, sellRb};
+        return sells;
     }
 
     public double getChangesBuy(int currencyId) {
