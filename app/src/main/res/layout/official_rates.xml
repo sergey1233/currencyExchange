@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:fitsSystemWindows="true"
+    android:id="@+id/main_container"
+    tools:context=".ui.MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/action_bar_only_title" />
+
+
+        <LinearLayout
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_width="0px"
+            android:layout_height="0px"/>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.rey.material.widget.ProgressView
+                    android:id="@+id/progressBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_gravity="center"
+                    android:indeterminate="true"
+                    app:pv_progressStyle="@style/LinearProgressView"
+                    app:pv_progressMode="indeterminate"
+                    app:pv_circular="false"
+                    app:pv_autostart="false"/>
+
+                <TextView
+                    android:id="@+id/official_rates_hint"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:textSize="12sp"
+                    android:textColor="@color/colorText"/>
+        
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp">
+        
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="6"
+                        android:textColorHint="@color/colorText">
+        
+                        <EditText
+                            android:id="@+id/cb_rates_count"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingRight="8dp"
+                            android:textColor="@color/colorText"
+                            android:hint="@string/input_count"
+                            android:textColorHint="@color/colorText"
+                            android:textStyle=""
+                            android:gravity="right"
+                            android:textSize="16sp"
+                            android:maxLength="6"
+                            android:inputType="numberDecimal" />
+        
+                    </android.support.design.widget.TextInputLayout>
+        
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="7"
+                        android:textColorHint="@color/colorText">
+        
+                        <EditText
+                            android:id="@+id/cb_rates_find"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingRight="8dp"
+                            android:textColor="@color/colorText"
+                            android:textStyle="bold"
+                            android:hint="@string/currency_find"
+                            android:textColorHint="@color/colorText"
+                            android:gravity="right"
+                            android:textSize="16sp"
+                            android:maxLength="10" />
+        
+                    </android.support.design.widget.TextInputLayout>
+        
+                    <ImageView
+                        android:id="@+id/cb_find_icon"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_marginTop="6dp"
+                        tools:src="@drawable/icon_find" />
+        
+                </LinearLayout>
+        
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+        
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recycler_view_cb_rates"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white" />
+                    
+                </LinearLayout>
+                
+                <android.support.v4.widget.Space
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp" />
+
+            </LinearLayout>
+
+            </android.support.v4.widget.NestedScrollView>
+    
+            <com.google.android.gms.ads.AdView
+                android:id="@+id/adView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|bottom"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                ads:adSize="BANNER"
+                ads:adUnitId="@string/banner_ad_unit_id">
+            </com.google.android.gms.ads.AdView>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

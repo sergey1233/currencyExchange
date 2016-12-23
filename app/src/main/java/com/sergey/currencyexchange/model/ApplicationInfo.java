@@ -5,48 +5,76 @@ import java.util.ArrayList;
 public class ApplicationInfo {
 
     private static final ApplicationInfo instance = new ApplicationInfo();
-    private int currencyId;
-    private Nbu nbu;
-    private MBank mBank;
-    private BlackMarket blackMarket;
-    private ArrayList<Bank> bankList;
+
+    private static final String URL_TYPE_Ukraine = "app_response_ua.php";
+    private static final String URL_TYPE_Usa = "app_response_usa.php";
+    private static final String URL_TYPE_Uk = "app_response_uk.php";
+    private static final String URL_TYPE_Europe = "app_response_eu.php";
+    private static final String URL_TYPE_Poland = "app_response_pl.php";
+    private static final String URL_TYPE_Turkey = "app_response_tr.php";
+    private static final String URL_TYPE_Russia = "app_response_ru.php";
+
+    private static ArrayList<Country> countries;
 
     private ApplicationInfo(){
-        nbu = new Nbu();
-        mBank = new MBank();
-        blackMarket = new BlackMarket();
-        bankList = new ArrayList<>();
+        countries = new ArrayList<>();
     }
 
     public static ApplicationInfo getInstance(){
         return instance;
     }
 
-    public void setNbu(Nbu nbu) {
-        this.nbu = nbu;
+    public ArrayList<Country> getCountries() {
+        return countries;
     }
 
-    public int getCurrencyId() {
-        return currencyId;
+    public Country getCountry() {
+        switch (Utils.country_code) {
+            case Utils.USA_CODE:
+                return countries.get(0);
+            case Utils.EUROPE_CODE:
+                return countries.get(1);
+            case Utils.UK_CODE:
+                return countries.get(2);
+            case Utils.POLAND_CODE:
+                return countries.get(3);
+            case Utils.TURKEY_CODE:
+                return countries.get(4);
+            case Utils.RUSSIA_CODE:
+                return countries.get(5);
+            case Utils.UKRAINE_CODE:
+                return countries.get(6);
+            default:
+                return countries.get(2);
+        }
     }
 
-    public Nbu getNbu() {
-        return nbu;
+    public void setCountries(Country country) {
+        countries.add(country);
     }
 
-    public MBank getMBank() {
-        return mBank;
+    public void removeAllCountries() {
+        countries.clear();
     }
 
-    public BlackMarket getBlackMarket() {
-        return blackMarket;
-    }
-
-    public ArrayList<Bank> getBankList() {
-        return bankList;
-    }
-
-    public void setCurrencyId(int currencyId) {
-        this.currencyId = currencyId;
+    public String getUrlType() {
+        switch (Utils.country_code) {
+            case Utils.USA_CODE:
+                return URL_TYPE_Usa;
+            case Utils.EUROPE_CODE:
+                return URL_TYPE_Europe;
+            case Utils.UK_CODE:
+                return URL_TYPE_Uk;
+            case Utils.POLAND_CODE:
+                return URL_TYPE_Poland;
+            case Utils.TURKEY_CODE:
+                return URL_TYPE_Turkey;
+            case Utils.RUSSIA_CODE:
+                return URL_TYPE_Russia;
+            case Utils.UKRAINE_CODE:
+                return URL_TYPE_Ukraine;
+            default:
+                return URL_TYPE_Uk;
+        }
     }
 }

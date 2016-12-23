@@ -1,27 +1,55 @@
 <resources>
-    <string name="app_name" translatable="false">CurrencyExchange</string>
-    <string name="app_label">Курс валют</string>
-    <string name="nbu">НБУ</string>
-    <string name="mb">Межбанк</string>
-    <string name="blackM">Черный рынок</string>
-    <string name="banksUkraine">Банки Украины</string>
-    <string name="bitcoin">Биткоин</string>
-    <string name="by_exchange">Курс</string>
-    <string name="counted">Пересчитать</string>
-    <string name="buy">Покупка</string>
-    <string name="sell">Продажа</string>
-    <string name="take_data">Данные взяты с сайтов minfin.com.ua и finance.ua.</string>
-    <string name="exception_count">Не корректно введено кол-во валюты для обмена</string>
-    <string name="exception_currency">Не корректно введен курс обмена</string>
-    <string name="grn" translatable="false">GRN</string>
+    <string name="app_name" translatable="false">ExRate</string>
+    <string name="app_label">Exchange Rates</string>
+    <string name="nbu">NBU</string>
+    <string name="rate_nbu">Nbu rate</string>
+    <string name="mb">Interbank</string>
+    <string name="blackM">Black market</string>
+    <string name="banksUkraine">Ukrainian Banks</string>
+    <string name="banksRussia">Russian Banks</string>
+    <string name="bitcoin">Bitcoin</string>
+    <string name="by_exchange">Rate</string>
+    <string name="counted">Calculate</string>
+    <string name="buy">Purchase</string>
+    <string name="sell">Sale</string>
+    <string name="take_data" translatable="false">Данные взяты с сайтов minfin.com.ua и finance.ua</string>
+    <string name="exception_count">Incorrectly entered the number of currency for exchange</string>
+    <string name="exception_currency">Incorrectly entered the exchange rate</string>
+    <string name="grn" translatable="false">UAH</string>
     <string name="usd" translatable="false">USD</string>
     <string name="eur" translatable="false">EUR</string>
     <string name="rub" translatable="false">RUB</string>
+    <string name="back">To exit, press \"back\" again</string>
+    <string name="set_own_currency">Enter an arbitrary rate</string>
+    <string name="hide_own_currency">Hide arbitrary rate</string>
+    <string name="too_big">Too large, enter something smaller</string>
+    <string name="fromWhatCurrency">From what currecny</string>
+    <string name="toWhatCurrency">In what currency</string>
+    <string name="ok">Confirm</string>
+    <string name="input_count">Enter an amount</string>
+    <string name="input_own_currency">Enter your rate</string>
+    <string name="inet_problem">The problem with the Internet connection</string>
+    <string name="banner_ad_unit_id" translatable="false">ca-app-pub-4587937543235763/1805103135</string>
+    <string name="currency_find">currency Search</string>
+    <string name="menu_update">Update</string>
+    <string name="menu_change_country">Change country</string>
+    <string name="menu_exit">Exit</string>
+    <string name="menu_estimate">Rate app</string>
+    <string name="official_rates">Official rates</string>
+    <string name="currency_point">Currency exchange point</string>
+    <string name="show_rate_current_currency_uk">It shows the value of the other currencies against the pound</string>
+    <string name="show_rate_current_currency_ua">It shows the value of the hryvnia to other currencies</string>
+    <string name="show_rate_current_currency_eu">It shows the value of other currencies against the euro</string>
+    <string name="show_rate_current_currency_us">It shows the value of the other currencies against the usd</string>
+    <string name="show_rate_current_currency_pl">It shows the value of the zloty to other currencies</string>
+    <string name="show_rate_current_currency_ru">It shows the value of the ruble to other currencies</string>
+    <string name="show_rate_current_currency_tr">It shows the value of the lira to other currencies</string>
+
     <string name="privat" translatable="false">ПриватБанк</string>
     <string name="oshad" translatable="false">Ощадбанк</string>
     <string name="sber_bank" translatable="false">СБЕРБАНК</string>
     <string name="raif" translatable="false">Райффайзен Банк Аваль</string>
-    <string name="ukrsots" translatable="false">Укрсоцбанк UniCredit Bank TM</string>
+    <string name="ukrsots" translatable="false">Укрсоцбанк</string>
     <string name="alpha_bank" translatable="false">Альфа-Банк</string>
     <string name="ukrsib" translatable="false">УкрСиббанк</string>
     <string name="pumb" translatable="false">ПУМБ</string>
@@ -31,14 +59,64 @@
     <string name="ugb" translatable="false">Укргазбанк</string>
     <string name="taskobank" translatable="false">ТАСкомбанк</string>
     <string name="kreditdnepr" translatable="false">КРЕДИТ ДНЕПР</string>
-    <string name="back">Для выхода из приложения нажмите кнопку "назад" еще раз</string>
-    <string name="set_own_currency">Ввести произвольный курс</string>
-    <string name="hide_own_currency">Спрятать произвольный курс</string>
-    <string name="too_big">Очень много, введите что то поменьше</string>
-    <string name="fromWhatCurrency">С какой валюты</string>
-    <string name="toWhatCurrency">На какую валюту</string>
-    <string name="ok">Подтвердить</string>
-    <string name="input_count">Введите кол-во</string>
-    <string name="input_own_currency">Введите свой курс</string>
-    <string name="banner_ad_unit_id" translatable="false">ca-app-pub-4587937543235763/1805103135</string>
+
+    <string name="alior" translatable="false">ALIOR BANK</string>
+    <string name="bps" translatable="false">BANK BPS</string>
+    <string name="pekasao" translatable="false">PEKAO SA</string>
+    <string name="wbk" translatable="false">BZACHODNI WBK</string>
+    <string name="bos" translatable="false">BOS BANK</string>
+    <string name="credit" translatable="false">CREDIT AGRICOLE</string>
+    <string name="getin" translatable="false">GETIN BANK</string>
+    <string name="ing" translatable="false">ING BANK SLASKI</string>
+    <string name="deutche" translatable="false">DEUTSCHE BANK</string>
+    <string name="paribas" translatable="false">BGZ BNP PARIBAS SA</string>
+    <string name="raiffeisen" translatable="false">Raiffeisen Polbank</string>
+    <string name="mbank" translatable="false">MBANK</string>
+    <string name="pko" translatable="false">PKO Bank Polski</string>
+
+    <string name="debenhams" translatable="false">DEBENHAMS</string>
+    <string name="first_choice" translatable="false">First Choice</string>
+    <string name="thomson" translatable="false">Thomson</string>
+    <string name="travelex" translatable="false">Travelex</string>
+    <string name="ice" translatable="false">ICE</string>
+    <string name="natwest" translatable="false">NATWEST</string>
+    <string name="rbs" translatable="false">RBS</string>
+    <string name="virgin_atlantic" translatable="false">Virgin Atlantic</string>
+    <string name="msbank" translatable="false">MSBANK</string>
+    <string name="thomas_cook" translatable="false">Thomas Cook</string>
+    <string name="eurochange" translatable="false">Eurochange</string>
+    <string name="ace_fx" translatable="false">ACE-FX</string>
+    <string name="griffin" translatable="false">GRIFFIN</string>
+    <string name="sterling" translatable="false">Sterling</string>
+    <string name="moneycorp" translatable="false">MoneyCorp</string>
+
+    <string name="sber_russia" translatable="false">Сбербанк России</string>
+    <string name="gasprom_russia" translatable="false">Газпромбанк</string>
+    <string name="rosselhoz_russia" translatable="false">Россельхозбанк</string>
+    <string name="alpha_russia" translatable="false">Альфа-Банк</string>
+    <string name="moscow_credit_russia" translatable="false">Московский Кредитный Банк</string>
+    <string name="promsvyaz_russia" translatable="false">Промсвязьбанк</string>
+    <string name="unicredit_russia" translatable="false">ЮниКредит Банк</string>
+    <string name="binbank_russia" translatable="false">Бинбанк</string>
+    <string name="raiffaisen_russia" translatable="false">Райффайзенбанк</string>
+    <string name="rosbank_russia" translatable="false">Росбанк</string>
+    <string name="moscow_bank_russia" translatable="false">Банк Москвы</string>
+    <string name="st_petersburg_bank_russia" translatable="false">Банк «Санкт-Петербург»</string>
+    <string name="sovkombank_russia" translatable="false">Совкомбанк</string>
+    <string name="russian_standart_russia" translatable="false">Русский Стандарт</string>
+    <string name="moscow_obl_bank_russia" translatable="false">Московский Областной Банк</string>
+    <string name="city_bank_russia" translatable="false">Ситибанк</string>
+    <string name="absolute_bank_russia" translatable="false">Абсолют Банк</string>
+    <string name="tinkoff_russia" translatable="false">Тинькофф Банк</string>
+
+    <string name="turkishbank_turkey" translatable="false">TurkishBank</string>
+    <string name="isbank_turkey" translatable="false">Türkiye İş Bankası A.Ş.</string>
+    <string name="akbank_turkey" translatable="false">Akbank</string>
+    <string name="denizbank_turkey" translatable="false">DenizBank</string>
+    <string name="yapikredi_turkey" translatable="false">Yapı Kredi</string>
+    <string name="ziraat_turkey" translatable="false">Ziraat Bankası</string>
+    <string name="vakifbank_turkey" translatable="false">VakıfBank</string>
+    <string name="pro_version">PLUS version</string>
+    <string name="banksPoland">Poland Banks</string>
+
 </resources>

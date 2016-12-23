@@ -8,29 +8,24 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.sergey.currencyexchange.R;
+import java.util.ArrayList;
 
 
 public class SelectSpinnerAdapter extends BaseAdapter {
     Context context;
-    String[] currencies;
-    int[] flags;
-    int[] icons;
-
+    ArrayList<Currency> currencyArray;
     LayoutInflater inflter;
 
-    public SelectSpinnerAdapter(Context applicationContext, String[] currencies, int[] flags, int[] icons) {
+    public SelectSpinnerAdapter(Context applicationContext, ArrayList<Currency> currencyArray) {
         this.context = applicationContext;
-        this.currencies = currencies;
-        this.flags = flags;
-        this.icons = icons;
+        this.currencyArray = currencyArray;
         inflter = (LayoutInflater.from(applicationContext));
     }
 
     @Override
     public int getCount() {
-        return flags.length;
+        return currencyArray.size();
     }
 
     @Override
@@ -49,9 +44,17 @@ public class SelectSpinnerAdapter extends BaseAdapter {
         ImageView flag = (ImageView)view.findViewById(R.id.item_spinner_flag);
         ImageView icon = (ImageView) view.findViewById(R.id.item_spinner_icon);
         TextView name = (TextView) view.findViewById(R.id.item_spinner_name);
-        flag.setImageResource(flags[i]);
-        icon.setImageResource(icons[i]);
-        name.setText(currencies[i]);
+
+        if (i == currencyArray.size()) {
+            flag.setImageResource(context.getResources().getIdentifier(currencyArray.get(i-1).getCountryFlag(), "drawable", context.getPackageName()));
+            icon.setImageResource(context.getResources().getIdentifier(currencyArray.get(i-1).getIconCurrency(), "drawable", context.getPackageName()));
+            name.setText(currencyArray.get(i-1).getName());
+        }
+        else {
+            flag.setImageResource(context.getResources().getIdentifier(currencyArray.get(i).getCountryFlag(), "drawable", context.getPackageName()));
+            icon.setImageResource(context.getResources().getIdentifier(currencyArray.get(i).getIconCurrency(), "drawable", context.getPackageName()));
+            name.setText(currencyArray.get(i).getName());
+        }
         return view;
     }
 }

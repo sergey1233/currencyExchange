@@ -1,7 +1,6 @@
 package com.sergey.currencyexchange.ui;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,18 +22,23 @@ public class BankListAdapter extends RecyclerView.Adapter<BankListAdapter.ViewHo
     private int currencyId = 0;
     private static final String TAG = "BankListAdapter";
 
-    public BankListAdapter(ArrayList<Bank> bankList, int currencyId, Context context)
-    {
-        this.bankList = bankList;
+    public BankListAdapter(ArrayList<Bank> bankArray, int currencyId, Context context) {
+        chekBanklist(bankArray);
         this.currencyId = currencyId;
         this.context = context;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.adapter_banks, viewGroup, false);
+        View view;
+        if (Utils.country_code == Utils.UK_CODE) {
+            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.adapter_banks_uk, viewGroup, false);
+        }
+        else {
+            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.adapter_banks, viewGroup, false);
+        }
 
-        return new ViewHolder(v);
+        return new ViewHolder(view);
     }
 
     @Override
@@ -48,15 +52,26 @@ public class BankListAdapter extends RecyclerView.Adapter<BankListAdapter.ViewHo
             Log.d("adapter", e.getMessage());
         }
 
-        if (bank.getName().equals("Укрсоцбанк UniCredit Bank TM")) {
-            viewHolder.nameBank.setText(bank.getName().substring(0, 10));
-        }
-        else {
+        if (Utils.country_code != Utils.UK_CODE) {
             viewHolder.nameBank.setText(bank.getName());
         }
+        else {
+            viewHolder.nameBank.setText("");
+        }
         viewHolder.bankDate.setText(bank.getDate());
-        viewHolder.bankBuyRate.setText(String.format("%.2f", Utils.roundResut(bank.getBuy(currencyId))));
-        viewHolder.bankSellRate.setText(String.format("%.2f", Utils.roundResut(bank.getSell(currencyId))));
+        if (bank.getBuy(currencyId) != 0) {
+            viewHolder.bankBuyRate.setText(String.format("%.2f", Utils.roundResut(bank.getBuy(currencyId))));
+        }
+        else {
+            viewHolder.bankBuyRate.setText("N/A");
+        }
+        if (bank.getSell(currencyId) != 0) {
+            viewHolder.bankSellRate.setText(String.format("%.2f", Utils.roundResut(bank.getSell(currencyId))));
+        }
+        else {
+            viewHolder.bankSellRate.setText("N/A");
+        }
+
         setChangesInfo(viewHolder, bank);
         if (i == bankList.size())
         {
@@ -81,9 +96,8 @@ public class BankListAdapter extends RecyclerView.Adapter<BankListAdapter.ViewHo
         return position % 2 * 2;
     }
 
-    public void addItemstoList(ArrayList<Bank> bankList)
-    {
-        this.bankList = bankList;
+    public void addItemstoList(ArrayList<Bank> bankArray) {
+        chekBanklist(bankArray);
     }
 
     public void addCurrencyId(int currencyId)
@@ -118,6 +132,20 @@ public class BankListAdapter extends RecyclerView.Adapter<BankListAdapter.ViewHo
                 viewHolder.bank_sell_changes_img_up.setVisibility(View.VISIBLE);
                 viewHolder.bank_sell_changes_img_down.setVisibility(View.INVISIBLE);
             }
+        }
+    }
+
+    public void chekBanklist(ArrayList<Bank> bankArray) {
+        if (bankArray != null && !bankArray.isEmpty()) {
+            this.bankList = new ArrayList<>(bankArray);
+            for (Bank bank : bankArray) {
+                if (bank.getBuy(currencyId) == 0 && bank.getSell(currencyId) == 0) {
+                    this.bankList.remove(bank);
+                }
+            }
+        }
+        else {
+            this.bankList = bankArray;
         }
     }
 

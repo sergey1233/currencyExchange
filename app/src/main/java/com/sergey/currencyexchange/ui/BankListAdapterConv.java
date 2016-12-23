@@ -2,8 +2,8 @@ package com.sergey.currencyexchange.ui;
 
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,38 +13,40 @@ import android.widget.TextView;
 import com.sergey.currencyexchange.R;
 import com.sergey.currencyexchange.model.ApplicationInfo;
 import com.sergey.currencyexchange.model.Bank;
+import com.sergey.currencyexchange.model.Country;
 import com.sergey.currencyexchange.model.Utils;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 
 public class BankListAdapterConv extends RecyclerView.Adapter<BankListAdapterConv.ViewHolder> {
-    private static final int GRN = 0;
-    private static final int USD = 1;
-    private static final int EUR = 2;
-    private static final int RUB = 3;
-    private int typefragment; //0 - buy; 1 - sell;
     private ArrayList<Bank> bankList;
     private double count;
     private Context context;
-    private ApplicationInfo applicationInfo;
+    private Country country;
     private int fromCurrency;
     private int toCurrency;
     private static final String TAG = "BankListAdapter";
 
-    public BankListAdapterConv(int typefragment, Context context, int fromCurrency, int toCurrency) {
-        applicationInfo = ApplicationInfo.getInstance();
-        this.bankList = applicationInfo.getBankList();
-        this.typefragment = typefragment;
+    public BankListAdapterConv(Context context, int fromCurrency, int toCurrency) {
+        country = ApplicationInfo.getInstance().getCountry();
         this.context = context;
         this.count = 0;
         this.fromCurrency = fromCurrency;
         this.toCurrency = toCurrency;
+        chekBanklist(country.getBankList());
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.adapter_banks_convert, viewGroup, false);
+        View v;
+        if (Utils.country_code == Utils.UK_CODE) {
+            v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.adapter_banks_convert_uk, viewGroup, false);
+        }
+        else {
+            v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.adapter_banks_convert, viewGroup, false);
+        }
 
         return new ViewHolder(v);
     }
@@ -52,108 +54,57 @@ public class BankListAdapterConv extends RecyclerView.Adapter<BankListAdapterCon
     @Override
     public void onBindViewHolder(BankListAdapterConv.ViewHolder viewHolder, int i) {
         Bank bank = bankList.get(i);
-        double[] buyCurrency = bank.getBuy();
-        double[] sellCurrency = bank.getSell();
+
+        double[] rateCurrency = bank.getRateConv(fromCurrency, toCurrency);
 
         try {
             viewHolder.logoBank.setImageResource(getIconBank(bank));
         }
         catch (Exception e) {}
 
-        if (bank.getName().equals("Укрсоцбанк UniCredit Bank TM")) {
-            viewHolder.nameBank.setText(bank.getName().substring(0, 10));
+        if (Utils.country_code != Utils.UK_CODE) {
+            if (bank.getName().equals("Укрсоцбанк UniCredit Bank TM")) {
+                viewHolder.nameBank.setText(bank.getName().substring(0, 10));
+            } else {
+                viewHolder.nameBank.setText(bank.getName());
+            }
         }
         else {
-            viewHolder.nameBank.setText(bank.getName());
+           viewHolder.nameBank.setText("");
         }
+
         viewHolder.line_recycle.setVisibility(View.VISIBLE);
-        if (typefragment == 0)
-        {
-            viewHolder.bankCurrency.setText(String.format("%.2f", Utils.roundResut(buyCurrency[0])) + "  |  " + String.format("%.2f", Utils.roundResut(buyCurrency[1])) + "  |  " + String.format("%.2f", Utils.roundResut(buyCurrency[2])));
-            viewHolder.bankSum.setText(String.format("%.2f", resultSum(count, fromCurrency, toCurrency, bank.getBuy())));
-        }
-        else
-        {
-            viewHolder.bankCurrency.setText(String.format("%.2f", Utils.roundResut(sellCurrency[0])) + "  |  " + String.format("%.2f", Utils.roundResut(sellCurrency[1])) + "  |  " + String.format("%.2f", Utils.roundResut(sellCurrency[2])));
-            viewHolder.bankSum.setText(String.format("%.2f", resultSum(count, fromCurrency, toCurrency, bank.getSell())));
-        }
+
+        viewHolder.bankCurrency.setText(String.valueOf(Utils.roundResut(rateCurrency[0]) + "  |  " + String.valueOf(Utils.roundResut(rateCurrency[1]))));
+
+        viewHolder.bankSum.setText(resultSum(count, rateCurrency));
+
     }
 
-    public BigDecimal resultSum(double count, int fromCurrency, int toCurrency, double[] currencies) {
-        double rate = countRate(fromCurrency, toCurrency, currencies);
-        BigDecimal result = BigDecimal.valueOf(count * rate);
-        return result;
-    }
+    public String resultSum(double count, double[] currencies) {
+        BigDecimal countBig = new BigDecimal(String.valueOf(count));
+        BigDecimal rateFrom;
+        BigDecimal rateTo;
 
-    public double countRate(int fromCurrency, int toCurrency, double[] currencies) {
-        double finalRate = 0;
-        switch (fromCurrency) {
-            case GRN:
-                switch (toCurrency) {
-                    case GRN:
-                        finalRate = 1;
-                        break;
-                    case USD:
-                        finalRate = 1 / currencies[0];
-                        break;
-                    case EUR:
-                        finalRate = 1 / currencies[1];
-                        break;
-                    case RUB:
-                        finalRate = 1 / currencies[2];
-                        break;
-                }
-                break;
-            case USD:
-                switch (toCurrency) {
-                    case GRN:
-                        finalRate = currencies[0];
-                        break;
-                    case USD:
-                        finalRate = 1;
-                        break;
-                    case EUR:
-                        finalRate = currencies[0] / currencies[1];
-                        break;
-                    case RUB:
-                        finalRate = currencies[0] / currencies[2];
-                        break;
-                }
-                break;
-            case EUR:
-                switch (toCurrency) {
-                    case GRN:
-                        finalRate = currencies[1];
-                        break;
-                    case USD:
-                        finalRate = currencies[1] / currencies[0];
-                        break;
-                    case EUR:
-                        finalRate = 1;
-                        break;
-                    case RUB:
-                        finalRate = currencies[1] / currencies[2];
-                        break;
-                }
-                break;
-            case RUB:
-                switch (toCurrency) {
-                    case GRN:
-                        finalRate = currencies[2];
-                        break;
-                    case USD:
-                        finalRate = currencies[2] / currencies[0];
-                        break;
-                    case EUR:
-                        finalRate = currencies[2] / currencies[1];
-                        break;
-                    case RUB:
-                        finalRate = 1;
-                        break;
-                }
-                break;
+        //Because in UK buy and sell have different meaning than in Ukraine and rates are not from pound(like grn), but from another currency
+        if (Utils.country_code == Utils.UK_CODE) {
+            rateFrom = new BigDecimal(1).divide(new BigDecimal(String.valueOf(currencies[0])), 5, RoundingMode.HALF_UP);
+            rateTo = new BigDecimal(1).divide(new BigDecimal(String.valueOf(currencies[1])), 5, RoundingMode.HALF_UP);
         }
-        return finalRate;
+        else {
+            rateFrom = new BigDecimal(String.valueOf(currencies[0]));
+            rateTo = (new BigDecimal(String.valueOf(currencies[1])));
+        }
+
+        BigDecimal result;
+        try {
+            result = (countBig.multiply(rateFrom).divide(rateTo, 5, RoundingMode.HALF_UP));
+        }
+        catch (ArithmeticException e){
+            result = new BigDecimal(0);
+        }
+
+        return String.valueOf(result.setScale(2, RoundingMode.HALF_UP));
     }
 
     public int getIconBank(Bank bank) {
@@ -177,6 +128,21 @@ public class BankListAdapterConv extends RecyclerView.Adapter<BankListAdapterCon
         this.count = count;
         this.fromCurrency = fromCurrency;
         this.toCurrency = toCurrency;
+    }
+
+    public void chekBanklist(ArrayList<Bank> bankArray) {
+        if (bankArray != null && !bankArray.isEmpty()) {
+            this.bankList = new ArrayList<>(bankArray);
+            for (Bank bank : bankArray) {
+                double[] currencies = bank.getRateConv(fromCurrency, toCurrency);
+                if (currencies[0] == 0 || currencies[1] == 0) {
+                    this.bankList.remove(bank);
+                }
+            }
+        }
+        else {
+            this.bankList = bankArray;
+        }
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

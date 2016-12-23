@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="?android:actionBarSize"
+    android:background="@color/colorPrimaryDark"
+    android:orientation="horizontal"
+    android:gravity="center_vertical">
+
+    <ImageButton
+        android:id="@+id/toolbar_country_flag"
+        android:layout_width="48dp"
+        android:layout_height="24dp"
+        android:layout_weight="0"
+        android:layout_marginLeft="8dp"
+        tools:background="@drawable/currency_flag_usa"
+        android:layout_gravity="center"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginRight="8dp"
+        android:layout_weight="1"
+        android:text="@string/official_rates"
+        android:textColor="@color/colorTextMain"
+        android:textStyle="bold"
+        android:textSize="22sp"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:orientation="vertical"
+        android:gravity="right">
+
+        <com.balysv.materialripple.MaterialRippleLayout
+            app:mrl_rippleColor="@color/colorPrimary"
+            app:mrl_rippleOverlay="true"
+            app:mrl_rippleAlpha="0.5"
+            app:mrl_rippleHover="true"
+            app:mrl_rippleDuration="150"
+            app:mrl_rippleFadeDuration="75"
+            app:mrl_rippleDelayClick="true"
+            app:mrl_ripplePersistent="false"
+            android:layout_width="64dp"
+            android:layout_height="56dp"
+            android:paddingBottom="12dp"
+            android:paddingTop="12dp">
+
+            <ImageButton
+                android:id="@+id/icon_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@null"
+                app:srcCompat="@drawable/icon_menu_dark"/>
+
+        </com.balysv.materialripple.MaterialRippleLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

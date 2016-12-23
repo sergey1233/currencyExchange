@@ -3,226 +3,150 @@ package com.sergey.currencyexchange.model;
 
 public class MBank {
 
-    private static final int DOLLAR = 0;
-    private static final int EURO = 1;
-    private static final int RB = 2;
-    private static final String URLTYPE = "app_response_mb.php";
-    private static final int[] idTimeArray = {10, 11, 12, 13, 14, 15, 16, 17};
-    private String[] dateArray;
-    private double[] buyArrayDollar;
-    private double[] sellArrayDollar;
-    private double[] buyArrayEuro;
-    private double[] sellArrayEuro;
-    private double[] buyArrayRb;
-    private double[] sellArrayRb;
     private String date;
-    private double buyDollar;
-    private double buyEuro;
-    private double buyRb;
-    private double sellDollar;
-    private double sellEuro;
-    private double sellRb;
-    private double changesBuyDollar = 0;
-    private double changesSellDollar = 0;
-    private double changesBuyEuro = 0;
-    private double changesSellEuro = 0;
-    private double changesBuyRb = 0;
-    private double changesSellRb = 0;
+    private double buyUSD = 0;
+    private double sellUSD = 0;
+    private double buyEUR = 0;
+    private double sellEUR = 0;
+    private double buyRUB = 0;
+    private double sellRUB = 0;
+    private double buyUAH = 1;
+    private double sellUAH = 1;
+    private double changesBuyUSD = 0;
+    private double changesSellUSD = 0;
+    private double changesBuyEUR = 0;
+    private double changesSellEUR = 0;
+    private double changesBuyRUB = 0;
+    private double changesSellRUB = 0;
+    private double changesBuyUAH = 0;
+    private double changesSellUAH = 0;
 
-    public MBank() {
-        this.dateArray = new String[0];
-        this.buyArrayDollar = new double[0];
-        this.sellArrayDollar = new double[0];
-        this.buyArrayEuro = new double[0];
-        this.sellArrayEuro = new double[0];
-        this.buyArrayRb = new double[0];
-        this.sellArrayRb = new double[0];
-    }
 
     public String getDate() {
         return date;
     }
 
+    public double[] getRatesConv(int fromCurrency, int toCurrency) {
+        double[] rates = new double[2];
+
+        switch (fromCurrency) {
+            case Utils.usd:
+                rates[0] = buyUSD;
+                break;
+            case Utils.eur:
+                rates[0] = buyEUR;
+                break;
+            case Utils.rb:
+                rates[0] = buyRUB;
+                break;
+            case Utils.uah:
+                rates[0] = buyUAH;
+                break;
+            default:
+                rates[0] = buyUSD;
+                break;
+        }
+
+        switch (toCurrency) {
+            case Utils.usd:
+                rates[1] = sellUSD;
+                break;
+            case Utils.eur:
+                rates[1] = sellEUR;
+                break;
+            case Utils.rb:
+                rates[1] = sellRUB;
+                break;
+            case Utils.uah:
+                rates[1] = sellUAH;
+                break;
+            default:
+                rates[1] = sellUSD;
+                break;
+        }
+
+        return rates;
+    }
 
     public double getBuy(int currencyId) {
         switch (currencyId)
         {
-            case DOLLAR:
-                return buyDollar;
-            case EURO:
-                return buyEuro;
-            case RB:
-                return buyRb;
+            case Utils.usd:
+                return buyUSD;
+            case Utils.eur:
+                return buyEUR;
+            case Utils.rb:
+                return buyRUB;
+            case Utils.uah:
+                return buyUAH;
         }
-        return buyDollar;
+        return buyUSD;
     }
 
     public double[] getBuy() {
-        double[] buys = {buyDollar, buyEuro, buyRb};
+        double[] buys = {buyUSD, buyEUR, buyRUB};
         return buys;
     }
-
 
     public double getSell(int currencyId) {
         switch (currencyId)
         {
-            case DOLLAR:
-                return sellDollar;
-            case EURO:
-                return sellEuro;
-            case RB:
-                return sellRb;
+            case Utils.usd:
+                return sellUSD;
+            case Utils.eur:
+                return sellEUR;
+            case Utils.rb:
+                return sellRUB;
+            case Utils.uah:
+                return sellUAH;
         }
-        return sellDollar;
+        return sellRUB;
     }
 
     public double[] getSell() {
-        double[] sells = {sellDollar, sellEuro, sellRb};
+        double[] sells = {sellUSD, sellEUR, sellRUB};
         return sells;
     }
 
-
     public double getChangesBuy(int currencyId) {
-        countChangesBuy();
         switch (currencyId)
         {
-            case DOLLAR:
-                return changesBuyDollar;
-            case EURO:
-                return changesBuyEuro;
-            case RB:
-                return changesBuyRb;
+            case Utils.usd:
+                return changesBuyUSD;
+            case Utils.eur:
+                return changesBuyEUR;
+            case Utils.rb:
+                return changesBuyRUB;
         }
-        return changesBuyDollar;
+        return changesBuyUSD;
     }
 
     public double getChangesSell(int currencyId) {
-        countChangesSell();
         switch (currencyId)
         {
-            case DOLLAR:
-                return changesSellDollar;
-            case EURO:
-                return changesSellEuro;
-            case RB:
-                return changesSellRb;
+            case Utils.usd:
+                return changesSellUSD;
+            case Utils.eur:
+                return changesSellEUR;
+            case Utils.rb:
+                return changesSellRUB;
         }
-        return changesSellDollar;
+        return changesSellUSD;
     }
 
-    /* Changes counted from last value to first value of the day*/
-    private void countChangesBuy() {
-        if (buyArrayDollar.length >= 2)
-        {
-            changesBuyDollar = buyArrayDollar[buyArrayDollar.length - 1] - buyArrayDollar[0];
-        }
-        if (buyArrayEuro.length >= 2)
-        {
-            changesBuyEuro = buyArrayEuro[buyArrayEuro.length - 1] - buyArrayEuro[0];
-        }
-        if (buyArrayRb.length >= 2)
-        {
-            changesBuyRb = buyArrayRb[buyArrayRb.length - 1] - buyArrayRb[0];
-        }
-    }
-
-    private void countChangesSell() {
-        if (sellArrayDollar.length >= 2)
-        {
-            changesSellDollar = sellArrayDollar[sellArrayDollar.length - 1] - sellArrayDollar[0];
-        }
-        if (sellArrayEuro.length >= 2)
-        {
-            changesSellEuro = sellArrayEuro[sellArrayEuro.length - 1] - sellArrayEuro[0];
-        }
-        if (sellArrayRb.length >= 2)
-        {
-            changesSellRb = sellArrayRb[sellArrayRb.length - 1] - sellArrayRb[0];
-        }
-    }
-
-    public void setNewInformation(String[] date, double[] buyArrayDollar, double[] sellArrayDollar, double[] buyArrayEuro, double[] sellArrayEuro, double[] buyArrayRb, double[] sellArrayRb) {
-        this.dateArray = date;
-        this.buyArrayDollar = buyArrayDollar;
-        this.sellArrayDollar = sellArrayDollar;
-        this.buyArrayEuro = buyArrayEuro;
-        this.sellArrayEuro = sellArrayEuro;
-        this.buyArrayRb = buyArrayRb;
-        this.sellArrayRb = sellArrayRb;
-
-        if (dateArray.length == 0) {
-            this.date = "нет информации";
-        }
-        else if (dateArray.length < 2) {
-            this.date = dateArray[0];
-        }
-        else {
-            this.date = dateArray[dateArray.length - 1];
-        }
-
-        if (buyArrayDollar.length == 0) {
-            this.buyDollar = 0;
-        }
-        else if (buyArrayDollar.length < 2) {
-            this.buyDollar = buyArrayDollar[0];
-        }
-        else {
-            this.buyDollar = buyArrayDollar[buyArrayDollar.length - 1];
-        }
-
-        if (sellArrayDollar.length == 0) {
-            this.sellDollar = 0;
-        }
-        else if (sellArrayDollar.length < 2) {
-            this.sellDollar = sellArrayDollar[0];
-        }
-        else {
-            this.sellDollar = sellArrayDollar[sellArrayDollar.length - 1];
-        }
-
-        if (buyArrayEuro.length == 0) {
-            this.buyEuro = 0;
-        }
-        else if (buyArrayEuro.length < 2) {
-            this.buyEuro = buyArrayEuro[0];
-        }
-        else {
-            this.buyEuro = buyArrayEuro[buyArrayEuro.length - 1];
-        }
-
-        if (sellArrayEuro.length == 0) {
-            this.sellEuro = 0;
-        }
-        else if (sellArrayEuro.length < 2) {
-            this.sellEuro = sellArrayEuro[0];
-        }
-        else {
-            this.sellEuro = sellArrayEuro[sellArrayEuro.length - 1];
-        }
-
-
-        if (buyArrayRb.length == 0) {
-            this.buyRb = 0;
-        }
-        else if (buyArrayRb.length < 2) {
-            this.buyRb = buyArrayRb[0];
-        }
-        else {
-            this.buyRb = buyArrayRb[buyArrayRb.length - 1];
-        }
-
-        if (sellArrayRb.length == 0) {
-            this.sellRb = 0;
-        }
-        else if (sellArrayRb.length < 2) {
-            this.sellRb = sellArrayRb[0];
-        }
-        else {
-            this.sellRb = sellArrayRb[sellArrayRb.length - 1];
-        }
-    }
-
-    public static String getUrlType() {
-        return URLTYPE;
+    public void setNewInformation(String date, double buyDollar, double sellDollar, double buyEuro, double sellEuro, double buyRb, double sellRb, double changesBuyDollar, double changesSellDollar, double changesBuyEuro, double changesSellEuro, double changesBuyRb, double changesSellRb) {
+        this.date = date;
+        this.buyUSD = buyDollar;
+        this.sellUSD = sellDollar;
+        this.buyEUR = buyEuro;
+        this.sellEUR = sellEuro;
+        this.buyRUB = buyRb;
+        this.sellRUB = sellRb;
+        this.changesBuyUSD = changesBuyDollar;
+        this.changesSellUSD = changesSellDollar;
+        this.changesBuyEUR = changesBuyEuro;
+        this.changesSellEUR = changesSellEuro;
+        this.changesBuyRUB = changesBuyRb;
+        this.changesSellRUB = changesSellRb;
     }
 }

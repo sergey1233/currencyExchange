@@ -27,4 +27,14 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="LinearProgressView" parent="Material.Drawable.LinearProgress">
+        <item name="lpd_strokeColor">@color/green</item>
+        <item name="lpd_strokeSecondaryColor">@android:color/transparent</item>
+        <item name="lpd_reverse">true</item>
+        <item name="pv_autostart">false</item>
+        <item name="pv_circular">false</item>
+        <item name="pv_progressMode">indeterminate</item>
+        <item name="lpd_strokeColors">@array/scheme_colors</item>
+    </style>
+
 </resources>
