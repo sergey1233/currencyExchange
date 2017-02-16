@@ -14,6 +14,14 @@ public class Currency {
     private int currencyId;
 
     //For selectCurrencyList
+    public Currency(String countryFlag, String icon, String country, String name, int currencyId) {
+        this.countryFlag = countryFlag;
+        this.icon = icon;
+        this.country = country;
+        this.name = name;
+        this.currencyId = currencyId;
+    }
+
     public Currency(String countryFlag, String icon, String country, int currencyId) {
         this.countryFlag = countryFlag;
         this.icon = icon;

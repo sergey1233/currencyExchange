@@ -40,9 +40,8 @@ public class CentralBank {
     private double changesJPY = 0;
     private double changesUAH = 0;
 
-
-
     private ArrayList<Currency> currencyList;
+
 
     public CentralBank(int countryCode) {
         currencyList = new ArrayList<>();

@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
         //the main unique data of the app
         app = ApplicationInfo.getInstance();
 
-        if (typeAct == 0) {//first open
+        if (typeAct == 0 || app.getCountries().size() < 7) {//first open
             app.removeAllCountries();
             app.setCountries(new Country("currency_flag_usa", getString(R.string.usa), 1));
             app.setCountries(new Country("currency_flag_europe", getString(R.string.europe), 2));
@@ -717,7 +717,7 @@ public class MainActivity extends AppCompatActivity {
         cBFindIcon.setImageResource(R.drawable.icon_find);
 
         recyclerViewRates = (RecyclerView)findViewById(R.id.recycler_view_cb_rates);
-        cBRateAdapter = new CBankRatesAdapter(currencyListEurope, MainActivity.this);
+        cBRateAdapter = new CBankRatesAdapter(currencyListTurkey, MainActivity.this);
         recyclerViewRates.setAdapter(cBRateAdapter);
         recyclerViewRates.setNestedScrollingEnabled(false);
         recyclerViewRates.setFocusable(false);
@@ -761,11 +761,11 @@ public class MainActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 ArrayList<Currency> currencyNewFound = new ArrayList<Currency>();
                 if (editable.toString().isEmpty()) {
-                    cBRateAdapter.addItemstoList(currencyListEurope);
+                    cBRateAdapter.addItemstoList(currencyListTurkey);
                     cBRateAdapter.notifyDataSetChanged();
                 }
                 else {
-                    for (Currency currency : currencyListEurope) {
+                    for (Currency currency : currencyListTurkey) {
                         if ((currency.getCountry().toLowerCase().contains(editable.toString().toLowerCase())) || currency.getName().toLowerCase().contains(editable.toString().toLowerCase())) {
                             currencyNewFound.add(currency);
                         }

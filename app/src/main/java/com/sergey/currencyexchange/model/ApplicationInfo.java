@@ -24,11 +24,11 @@ public class ApplicationInfo {
         return instance;
     }
 
-    public ArrayList<Country> getCountries() {
+    public static ArrayList<Country> getCountries() {
         return countries;
     }
 
-    public Country getCountry() {
+    public static Country getCountry() {
         switch (Utils.country_code) {
             case Utils.USA_CODE:
                 return countries.get(0);
@@ -49,15 +49,15 @@ public class ApplicationInfo {
         }
     }
 
-    public void setCountries(Country country) {
+    public static void setCountries(Country country) {
         countries.add(country);
     }
 
-    public void removeAllCountries() {
+    public static void removeAllCountries() {
         countries.clear();
     }
 
-    public String getUrlType() {
+    public static String getUrlType() {
         switch (Utils.country_code) {
             case Utils.USA_CODE:
                 return URL_TYPE_Usa;

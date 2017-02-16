@@ -63,7 +63,7 @@ public class CurrencyListAdapter extends RecyclerView.Adapter<CurrencyListAdapte
             Log.d("adapter", e.getMessage());
         }
 
-        viewHolder.countryName.setText(currency.getCountry());
+        viewHolder.currencyName.setText(currency.getName());
 
         if (i == (selectCurrencyList.size() - 1))
         {
@@ -96,7 +96,7 @@ public class CurrencyListAdapter extends RecyclerView.Adapter<CurrencyListAdapte
         private MaterialRippleLayout rippleLayout;
         private ImageView countryFlag;
         private ImageView currencyIcon;
-        private TextView countryName;
+        private TextView currencyName;
         private View seperateLine;
 
         public ViewHolder(View itemView) {
@@ -104,7 +104,7 @@ public class CurrencyListAdapter extends RecyclerView.Adapter<CurrencyListAdapte
             rippleLayout = (MaterialRippleLayout)itemView.findViewById(R.id.ripple_view);
             countryFlag = (ImageView)itemView.findViewById(R.id.select_currency_country_flag);
             currencyIcon = (ImageView)itemView.findViewById(R.id.select_currency_currency_icon);
-            countryName = (TextView)itemView.findViewById(R.id.select_currency_country_name);
+            currencyName = (TextView)itemView.findViewById(R.id.select_currency_country_name);
             seperateLine = (View)itemView.findViewById(R.id.seperate_line);
         }
     }
